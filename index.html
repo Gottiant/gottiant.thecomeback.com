@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Colorado — Nicolas & Inès · Summer 2025</title>
+<title>Colorado — Antoine & Victoire · Summer 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
@@ -174,8 +174,8 @@ svg text{font-family:var(--font-body)}
 <div class="hero">
   <div class="hero-inner">
     <div class="hero-eyebrow">Travel Itinerary &nbsp;·&nbsp; Draft &nbsp;·&nbsp; <span id="today-date"></span></div>
-    <h1>Colorado<br><em>Nicolas & Inès</em></h1>
-    <div class="hero-sub">15 days &nbsp;·&nbsp; Summer 2025 &nbsp;·&nbsp; Colorado Road Trip</div>
+    <h1>Colorado<br><em>Antoine & Victoire</em></h1>
+    <div class="hero-sub">15 days &nbsp;·&nbsp; Summer 2026 &nbsp;·&nbsp; Colorado Road Trip</div>
     <div class="hero-chips">
       <span class="chip">15 days</span>
       <span class="chip">2 travelers</span>
@@ -194,9 +194,9 @@ svg text{font-family:var(--font-body)}
   <div class="section-lead">Essential details at a glance</div>
   <div class="info-cards">
     <div class="ic"><div class="ic-label">Arrival</div><div class="ic-val">D1 — 4:00 PM</div><div class="ic-sub">Denver Intl Airport (DEN)</div></div>
-    <div class="ic"><div class="ic-label">Departure</div><div class="ic-val">D15 — 5:00 PM</div><div class="ic-sub">Return flight to Europe</div></div>
+    <div class="ic"><div class="ic-label">Departure</div><div class="ic-val">D15 — 5:00 PM</div><div class="ic-sub">Return flight to France</div></div>
     <div class="ic"><div class="ic-label">Accommodation</div><div class="ic-val">D1–D7 & D13–D14</div><div class="ic-sub">Arvada M&R</div></div>
-    <div class="ic"><div class="ic-label">Vehicle</div><div class="ic-val">Rental SUV</div><div class="ic-sub">Pick up D7 eve or D8 morning</div></div>
+    <div class="ic"><div class="ic-label">Vehicle</div><div class="ic-val">Car rental</div><div class="ic-sub">Pick up on D1 at the airport</div></div>
     <div class="ic"><div class="ic-label">Recommended pass</div><div class="ic-val">America the Beautiful</div><div class="ic-sub">~$80 · Covers all National Parks</div></div>
     <div class="ic"><div class="ic-label">Food allergy</div><div class="ic-val">Mustard</div><div class="ic-sub">Mention at every restaurant</div></div>
   </div>
@@ -300,7 +300,7 @@ svg text{font-family:var(--font-body)}
         <li><strong>Tips</strong> — 15–20% at restaurants, 10–15% taxi. Culturally non-optional</li>
         <li><strong>Sales tax</strong> — prices displayed are pre-tax. Add ~8–10%</li>
         <li><strong>America the Beautiful Pass</strong> — ~$80, covers RMNP + Black Canyon + Sand Dunes</li>
-        <li><strong>SUV rental</strong> — budget ~$600–900 for 5 days. Book via Costco Travel or AutoEurope</li>
+        <li><strong>car rental</strong> — budget ~$600–900 for 5 days. Book via Costco Travel or AutoEurope</li>
       </ul>
     </div>
   </div>
@@ -376,7 +376,7 @@ svg text{font-family:var(--font-body)}
 <!-- BUDGET SUMMARY -->
 <div class="section">
   <div class="section-title">Budget Summary</div>
-  <div class="section-lead">Per person estimates — excludes flights, SUV rental (~$600–900 / 5 days) and America the Beautiful Pass (~$80)</div>
+  <div class="section-lead">Per person estimates — excludes flights, car rental (~$600–900 / 5 days) and America the Beautiful Pass (~$80)</div>
   <div style="background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
     <table class="budget-table">
       <thead><tr><th>Phase</th><th>Budget</th><th>Comfort</th><th>Premium</th></tr></thead>
@@ -438,13 +438,13 @@ function hideTip(){tt.style.opacity='0'}
 const DAYS  = ['D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12','D13','D14','D15'];
 const PHASE = ['arvada','arvada','arvada','arvada','arvada','arvada','arvada','rt','rt','rt','rt','rt','fin','fin','dep'];
 const MILES = [25,20,110,110,10,10,5,125,80,175,155,170,15,10,25];
-const MILES_TIP = ['Arrival + transfer','Red Rocks + RiNo Denver','Rocky Mountain NP','Colorado Springs + Pikes Peak','Local Denver','Local Arvada','SUV pickup, prep','Arvada→Breckenridge→Aspen','Maroon Bells, Aspen explore','Aspen→Black Canyon (Montrose)','Montrose→Great Sand Dunes','Sand Dunes→Royal Gorge→Arvada','Denver day','Cherry Creek + Red Rocks','Airport transfer'];
+const MILES_TIP = ['Arrival + transfer','Red Rocks + RiNo Denver','Rocky Mountain NP','Colorado Springs + Pikes Peak','Local Denver','Local Arvada','Prep day — packing & supplies','Arvada→Breckenridge→Aspen','Maroon Bells, Aspen explore','Aspen→Black Canyon (Montrose)','Montrose→Great Sand Dunes','Sand Dunes→Royal Gorge→Arvada','Denver day','Cherry Creek + Red Rocks','Airport transfer'];
 // Departure and return in decimal hours (null = no driving day)
-const DEPART = [null,6.5,6.75,7.5,null,null,8,8,6,8,7.5,7.5,null,8,null];
-const RETURN_ = [16,20,18,19,21,22,22,19,20,20,20,18,22,22,17];
-const TIME_TIP = ['Arrival 4PM','Red Rocks 6:30AM → RiNo 8PM','RMNP depart 6:45AM → back 6PM','CO Springs 7:30AM → back 7PM','Flexible day','Flexible + evening concert','SUV pickup, packing','Depart 8AM → Aspen 7PM','Maroon Bells 6AM → Montrose 8PM','Black Canyon 8AM → Montrose 8PM','Sand Dunes 7:30AM → Alamosa 8PM','Royal Gorge 7:30AM → Arvada 6PM','Flexible Denver day','Red Rocks hike → farewell dinner','Morning free → airport 1PM'];
+const DEPART = [16,6.5,6.75,7.5,null,null,null,8,6,8,7.5,7.5,null,8,null];
+const RETURN_ = [21,20,18,19,21,21,21,19,20,20,20,18,22,22,17];
+const TIME_TIP = ['Arrival 4PM → dinner with M&R 9PM','Red Rocks 6:30AM → RiNo 8PM','RMNP depart 6:45AM → back 6PM','CO Springs 7:30AM → back 7PM','Free day with M&R','Event at M&R','Prep day → dinner with M&R','Depart 8AM → Aspen 7PM','Maroon Bells 6AM → Montrose 8PM','Black Canyon 8AM → Montrose 8PM','Sand Dunes 7:30AM → Alamosa 8PM','Royal Gorge 7:30AM → Arvada 6PM','Flexible Denver day','Red Rocks hike → farewell dinner','Morning free → airport 1PM'];
 const BUDGET = [80,130,150,200,90,100,150,380,320,200,190,200,110,130,60];
-const BUDGET_TIP = ['Arrival dinner + transfer','Red Rocks + RiNo meals + brewery','RMNP entry + meals','Garden of Gods + Via Ferrata + Pikes Peak','Denver optional activities','Concert + transport','SUV + supplies + dinner','Breckenridge MTB + Aspen hotel + meals','Maroon Bells + Aspen hotel + meals','Black Canyon + Montrose hotel + meals','Sand Dunes + Alamosa hotel + meals','Royal Gorge + transport back','Denver day activities + meals','Souvenirs + farewell dinner','Brunch + airport transfer'];
+const BUDGET_TIP = ['Arrival dinner + transfer','Red Rocks + RiNo meals + brewery','RMNP entry + meals','Garden of Gods + Via Ferrata + Pikes Peak','Denver optional activities','Concert + transport','Supplies + dinner','Breckenridge MTB + Aspen hotel + meals','Maroon Bells + Aspen hotel + meals','Black Canyon + Montrose hotel + meals','Sand Dunes + Alamosa hotel + meals','Royal Gorge + transport back','Denver day activities + meals','Souvenirs + farewell dinner','Brunch + airport transfer'];
 
 // ── PHASE COLORS ──
 const PC = {arvada:'#E8C070',rt:'#8898D0',fin:'#B898C8',dep:'#B8B8B8'};
@@ -753,9 +753,9 @@ const MAP_LINKS={
 const days=[
   {num:'D1',phase:'arvada',tag:'Arvada',title:'Arrival in Denver',subtitle:'Landing ~4 PM — settling in Arvada',
    hebergement:'Arvada M&R',
-   activites:[{t:'4:00 PM',x:'Landing at Denver International Airport (DEN)'},{t:'5:00 PM',x:'Baggage claim + transfer to Arvada (~40 min)'},{t:'6:00 PM',x:'Pick up rental SUV (Denver airport or local agency on the way)'},{t:'7:00 PM',x:'Arrival at M&R :)'},{t:'Evening',x:'Dinner with M&R'}],
+   activites:[{t:'4:00 PM',x:'Landing at Denver International Airport (DEN)'},{t:'5:00 PM',x:'Baggage claim + transfer to Arvada (~40 min)'},{t:'6:00 PM',x:'Pick up car rental (Denver airport or local agency on the way)'},{t:'7:00 PM',x:'Arrival at M&R :)'},{t:'Evening',x:'Dinner with M&R'}],
    tips:'',
-   budget:{min:'~$50',conf:'~$80',prem:'~$100'},bn:'Transfer + SUV pickup + dinner'},
+   budget:{min:'~$50',conf:'~$80',prem:'~$100'},bn:'Transfer + Car rental pickup + dinner'},
   {num:'D2',phase:'arvada',tag:'Day trip',title:'Red Rocks Park + Denver RiNo',subtitle:"Sunrise at the rocks, then Denver's coolest neighborhood",
    hebergement:'Arvada M&R',
    activites:[{t:'6:30 AM',x:"<span class='magic'>Red Rocks Park — arrive before dawn</span> (30 min from Arvada)"},{t:'8:30 AM',x:'Trading Post Trail hike (2 mi) — free, no ticket needed'},{t:'10:30 AM',x:'Back to Arvada'},{t:'2:00 PM',x:'Denver: RiNo Art District — murals, galleries, The Source Market Hall'},{t:'Evening',x:'Explore RiNo at your own pace — craft breweries, restaurants, street art all within walking distance'}],
@@ -784,7 +784,7 @@ const days=[
   {num:'D7',phase:'arvada',tag:'Transition',title:'Road trip prep day',subtitle:'Packing, last supplies, last dinner with M&R',
    hebergement:'Arvada M&R',
    activites:[{t:'Morning',x:'Free time — last morning with M&R before hitting the road'},{t:'Afternoon',x:'Stock cooler, mountain snacks, water · pack bags · plan route · check Independence Pass conditions'},{t:'Evening',x:'Pre-trip dinner with M&R — BBQ or Colorado steakhouse'}],
-   tips:'Fill up the SUV in Arvada before leaving (cheaper than mountain gas stations). Download offline maps for the full circuit. Buy America the Beautiful Pass here if not already done (~$80, covers all NPs).',
+   tips:'Fill up the car in Arvada before leaving (cheaper than mountain gas stations). Download offline maps for the full circuit. Buy America the Beautiful Pass here if not already done (~$80, covers all NPs).',
    budget:{min:'~$60',conf:'~$100',prem:'~$150'},bn:'Supplies + dinner'},
   {num:'D8',phase:'rt',tag:'Road trip',title:'Arvada → Breckenridge → Aspen',subtitle:'Downhill MTB + first mountain night',
    hebergement:'Aspen — Limelight Aspen ★★★★ (comfort) or Hotel Aspen',
