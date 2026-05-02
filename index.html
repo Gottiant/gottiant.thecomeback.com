@@ -156,6 +156,16 @@ svg text{font-family:var(--font-body)}
 .footer{background:var(--pine);color:rgba(253,250,245,.45);text-align:center;padding:30px 24px;font-size:11px;font-weight:300;margin-top:24px;letter-spacing:.03em}
 .footer strong{color:var(--clay);font-weight:500}
 
+/* ── CHECKLIST ── */
+.cl-cat{padding:8px 20px;background:var(--mist);border-top:1px solid var(--border);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:#9AABA2}
+.cl-group{display:flex;flex-direction:column}
+.cl-item{display:flex;align-items:flex-start;gap:12px;padding:11px 20px;cursor:pointer;transition:background .15s;border-top:1px solid var(--border)}
+.cl-item:hover{background:#FAFCFA}
+.cl-item input[type=checkbox]{margin-top:3px;flex-shrink:0;accent-color:var(--pine);width:15px;height:15px;cursor:pointer}
+.cl-item span{font-size:12px;font-weight:300;color:var(--slate);line-height:1.55}
+.cl-item input:checked~span{color:#b0b8b2;text-decoration:line-through}
+.cl-warn{font-size:11px;color:var(--rust);font-style:italic;display:block;margin-top:3px}
+
 /* ── TOOLTIP ── */
 .tt{position:fixed;background:var(--ink);color:var(--snow);font-size:11px;font-family:var(--font-body);font-weight:300;padding:6px 10px;border-radius:3px;pointer-events:none;opacity:0;transition:opacity .15s;z-index:999;max-width:200px;line-height:1.4}
 
@@ -180,7 +190,7 @@ svg text{font-family:var(--font-body)}
       <span class="chip">15 days</span>
       <span class="chip">2 travelers</span>
       <span class="chip">Colorado</span>
-      <span class="chip">Road trip D8–D12</span>
+      <span class="chip">Road trip D7–D12</span>
     </div>
     <div class="status-badge"><span class="status-dot"></span>Draft — some destinations still to be confirmed</div>
   </div>
@@ -195,145 +205,116 @@ svg text{font-family:var(--font-body)}
   <div class="info-cards">
     <div class="ic"><div class="ic-label">Arrival</div><div class="ic-val">D1 — 4:00 PM</div><div class="ic-sub">Denver Intl Airport (DEN)</div></div>
     <div class="ic"><div class="ic-label">Departure</div><div class="ic-val">D15 — 5:00 PM</div><div class="ic-sub">Return flight to France</div></div>
-    <div class="ic"><div class="ic-label">Accommodation</div><div class="ic-val">D1–D7 & D13–D14</div><div class="ic-sub">Arvada M&R</div></div>
-    <div class="ic"><div class="ic-label">Vehicle</div><div class="ic-val">Car rental</div><div class="ic-sub">Pick up on D1 at the airport</div></div>
+    <div class="ic"><div class="ic-label">With M&R</div><div class="ic-val">D1–D7 & D13–D15</div><div class="ic-sub">Arvada — staying with friends</div></div>
+    <div class="ic"><div class="ic-label">Road trip hotels</div><div class="ic-val">D7–D12</div><div class="ic-sub">Aspen · Moab · Montrose · Alamosa</div></div>
+    <div class="ic"><div class="ic-label">Car rental</div><div class="ic-val">Pick up D1</div><div class="ic-sub">For the full duration of the trip</div></div>
     <div class="ic"><div class="ic-label">Recommended pass</div><div class="ic-val">America the Beautiful</div><div class="ic-sub">~$80 · Covers all National Parks</div></div>
-    <div class="ic"><div class="ic-label">Food allergy</div><div class="ic-val">Mustard</div><div class="ic-sub">Mention at every restaurant</div></div>
   </div>
 </div>
 
-<!-- STATISTICS -->
+<!-- OVERALL ITINERARY -->
 <div class="section">
-  <div class="section-title">Trip Statistics</div>
-  <div class="section-lead">Driving distances, daily schedule, and estimated spending across all 15 days</div>
+  <div class="section-title">Overall Itinerary</div>
+  <div class="section-lead">Driving distances and maps across all 15 days</div>
 
-  <!-- Chart 1: Driving Distance -->
+  <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;">
+    <span style="font-size:11px;color:#9AABA2;font-weight:400;">Distance:</span>
+    <button id="btn-mi" class="pt active" onclick="setUnit('mi')">Miles</button>
+    <button id="btn-km" class="pt" onclick="setUnit('km')">Kilometers</button>
+  </div>
+
   <div class="chart-card">
     <div class="chart-title">Daily Driving Distance</div>
-    <div class="chart-sub">Miles per day — dashed line shows trip average (days with no driving shown at 0)</div>
+    <div class="chart-sub" id="miles-sub">Miles per day — dashed line shows trip average</div>
     <div class="chart-wrap"><svg id="svg-miles" width="100%" style="display:block"></svg></div>
   </div>
 
-  <!-- Chart 2: Day Schedule (Gantt) -->
-  <div class="chart-card">
-    <div class="chart-title">Daily Schedule — Departure & Return</div>
-    <div class="chart-sub">Each bar spans from morning departure to evening return · Y axis = time of day · Note: most active days run 6 AM to 10 PM — plan for early mornings</div>
-    <div class="chart-wrap"><svg id="svg-times" width="100%" style="display:block"></svg></div>
+  <div class="chart-card" style="padding:0;overflow:hidden;">
+    <div style="padding:20px 20px 12px;">
+      <div class="chart-title">Trip Maps</div>
+      <div class="chart-sub">Day trips from Arvada and the full road trip circuit</div>
+    </div>
+    <div class="map-tabs">
+      <button class="map-tab active" onclick="switchMap('ex',this)">&#127968; Base &amp; day trips D1–D7</button>
+      <button class="map-tab" onclick="switchMap('rt',this)">&#128663; Road trip D7–D12</button>
+      <button class="map-tab" onclick="switchMap('full',this)">&#128506; Full route</button>
+    </div>
+    <div id="map-ex" style="padding:20px;">
+      <div class="map-fallback" style="background:var(--mist);border-radius:3px;padding:20px;text-align:center;">
+        <p style="margin-bottom:10px;font-size:13px;color:var(--slate)">Arvada · Red Rocks · Rocky Mountain NP · Colorado Springs · Pikes Peak · Denver RiNo</p>
+        <a class="map-btn" href="https://www.google.com/maps/dir/Arvada,+CO/Red+Rocks+Park+and+Amphitheatre,+Morrison,+CO/Rocky+Mountain+National+Park,+CO/Garden+of+the+Gods,+Colorado+Springs,+CO/Pikes+Peak,+CO/RiNo+Art+District,+Denver,+CO" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>
+      </div>
+    </div>
+    <div id="map-rt" style="display:none;padding:20px;">
+      <div class="map-fallback" style="background:var(--mist);border-radius:3px;padding:20px;text-align:center;">
+        <p style="margin-bottom:10px;font-size:13px;color:var(--slate)">Arvada &#8594; Aspen (Maroon Bells) &#8594; Moab (Arches / Dead Horse) &#8594; Black Canyon (Montrose) &#8594; Great Sand Dunes (Alamosa) &#8594; Arvada</p>
+        <a class="map-btn" href="https://www.google.com/maps/dir/Arvada,+CO/Aspen,+CO/Moab,+UT/Montrose,+CO/Great+Sand+Dunes+National+Park,+CO/Arvada,+CO" target="_blank" rel="noopener">Open in Google Maps &#8599;</a>
+      </div>
+    </div>
+    <div id="map-full" style="display:none;padding:20px;">
+      <div class="map-fallback" style="background:var(--mist);border-radius:3px;padding:20px;text-align:center;">
+        <p style="margin-bottom:10px;font-size:13px;color:var(--slate)">Complete circuit: Arvada — Red Rocks — RMNP — Colorado Springs — Aspen — Maroon Bells — Moab — Black Canyon — Great Sand Dunes — Arvada</p>
+        <a class="map-btn" href="https://www.google.com/maps/dir/Arvada,+CO/Aspen,+CO/Moab,+UT/Montrose,+CO/Great+Sand+Dunes+National+Park,+CO/Arvada,+CO" target="_blank" rel="noopener">Open full route in Google Maps &#8599;</a>
+      </div>
+    </div>
   </div>
-
-  <!-- Chart 3: Daily Budget -->
-  <div class="chart-card">
-    <div class="chart-title">Estimated Daily Spend — Comfort Level</div>
-    <div class="chart-sub">USD per person — dashed line shows daily average</div>
-    <div class="chart-wrap"><svg id="svg-budget" width="100%" style="display:block"></svg></div>
-  </div>
-
 </div>
 
 <!-- PREREQUISITES -->
 <div class="section">
-  <div class="section-title">Prerequisites & Preparation</div>
-  <div class="section-lead">Everything to arrange before departure</div>
-  <div class="prereq-grid">
-    <div class="prereq-card">
-      <span class="prereq-icon">📄</span>
-      <div class="prereq-title">Mandatory Documents</div>
-      <ul class="prereq-list">
-        <li><strong>Passport</strong> valid 6 months beyond return date</li>
-        <li><strong>ESTA</strong> — mandatory for EU citizens. Apply at esta.cbp.dhs.gov at least 72h before departure. Valid 2 years, ~$21</li>
-        <li><strong>International Driving Permit</strong> — not mandatory but strongly recommended alongside your national license</li>
-        <li><strong>International credit card</strong> (Visa or Mastercard) required for car rental deposit</li>
-        <li>Copies of all documents (paper + email to yourself)</li>
-      </ul>
-      <div class="prereq-alert">⚠ ESTA must be approved before purchasing flights if not already done.</div>
-    </div>
-    <div class="prereq-card">
-      <span class="prereq-icon">🛡️</span>
-      <div class="prereq-title">Recommended Insurance</div>
-      <ul class="prereq-list">
-        <li><strong>Trip cancellation / interruption</strong> — subscribe when booking flights</li>
-        <li><strong>International medical insurance</strong> — US healthcare is extremely expensive. Check Visa Premier / Mastercard Gold card coverage first</li>
-        <li><strong>Emergency repatriation</strong> — usually included in medical insurance. Essential</li>
-        <li><strong>Adventure sports coverage</strong> — via ferrata and downhill MTB are often excluded from standard policies</li>
-        <li><strong>Rental car insurance</strong> — decline agency offer if credit card already covers it</li>
-      </ul>
-    </div>
-    <div class="prereq-card">
-      <span class="prereq-icon">💉</span>
-      <div class="prereq-title">Health & Vaccinations</div>
-      <ul class="prereq-list">
-        <li><strong>Required vaccines</strong> — none required to enter the US from the EU</li>
-        <li><strong>Recommended</strong> — update DTP and hepatitis B. Consult a travel clinic at least 4 weeks before departure</li>
-        <li><strong>Altitude</strong> — notify your doctor if cardiac history. Prefer acetaminophen over ibuprofen at altitude</li>
-        <li><strong>First aid kit</strong> — antihistamines, SPF50+, blister pads, rehydration salts, personal medications</li>
-        <li><strong>Mustard allergy</strong> — carry a card in English: <em>"I have a mustard allergy."</em></li>
-      </ul>
-    </div>
-    <div class="prereq-card">
-      <span class="prereq-icon">📱</span>
-      <div class="prereq-title">Connectivity & Apps</div>
-      <ul class="prereq-list">
-        <li><strong>Roaming or US eSIM</strong> — Airalo / Holafly ~$20–30, unlimited data for 15 days</li>
-        <li><strong>Google Maps offline</strong> — download Colorado before departure (no signal in mountains)</li>
-        <li><strong>recreation.gov</strong> — create account for RMNP Timed Entry & Maroon Bells shuttle</li>
-        <li><strong>Uber / Lyft</strong> — activate account before departure</li>
-        <li><strong>Currency</strong> — $1 ≈ €0.92 (verify before departure)</li>
-      </ul>
-    </div>
-    <div class="prereq-card">
-      <span class="prereq-icon">🎒</span>
-      <div class="prereq-title">Essential Gear</div>
-      <ul class="prereq-list">
-        <li><strong>Hiking boots</strong> — ankle support required for via ferrata</li>
-        <li><strong>Layering system</strong> — temperatures range from 23°F (-5°C) (Pikes Peak summit) to 95°F (35°C) (Sand Dunes)</li>
-        <li><strong>Water bottle 1.5L+</strong> per person (refill at visitor centers)</li>
-        <li><strong>Harness & helmet</strong> — provided on-site at Royal Gorge Via Ferrata</li>
-        <li><strong>Power adapter</strong> — US Type A/B (110V, 60Hz)</li>
-        <li><strong>Sunscreen SPF50+</strong> — intense UV at altitude</li>
-      </ul>
-    </div>
-    <div class="prereq-card">
-      <span class="prereq-icon">💰</span>
-      <div class="prereq-title">Budget & Payments</div>
-      <ul class="prereq-list">
-        <li><strong>Cash</strong> — keep ~$100 for parking and small vendors</li>
-        <li><strong>Tips</strong> — 15–20% at restaurants, 10–15% taxi. Culturally non-optional</li>
-        <li><strong>Sales tax</strong> — prices displayed are pre-tax. Add ~8–10%</li>
-        <li><strong>America the Beautiful Pass</strong> — ~$80, covers RMNP + Black Canyon + Sand Dunes</li>
-        <li><strong>car rental</strong> — budget ~$600–900 for 5 days. Book via Costco Travel or AutoEurope</li>
-      </ul>
-    </div>
-  </div>
-</div>
+  <div class="section-title">Prerequisites &amp; Preparation</div>
+  <div class="section-lead">Everything to arrange before departure — tick each item off as you go</div>
+  <div style="background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
 
-<!-- MAPS -->
-<div class="section">
-  <div class="section-title">Trip Maps</div>
-  <div class="section-lead">Day trips from Arvada and the full road trip circuit</div>
-  <div class="map-section-wrap" style="margin-bottom:16px;">
-    <div class="map-tabs">
-      <button class="map-tab active" onclick="switchMap('ex',this)">🏠 Base & day trips D1–D7</button>
-      <button class="map-tab" onclick="switchMap('rt',this)">🚗 Road trip D8–D12</button>
-      <button class="map-tab" onclick="switchMap('full',this)">🗺️ Full road trip route</button>
+    <div class="cl-cat">Documents</div>
+    <div class="cl-group">
+      <label class="cl-item"><input type="checkbox"><span><strong>Passport</strong> — valid at least 6 months beyond return date</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>ESTA</strong> — mandatory for EU citizens · apply at esta.cbp.dhs.gov · at least 72h before departure · ~$21 · valid 2 years<span class="cl-warn">⚠ Must be approved before purchasing flights</span></span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>International Driving Permit</strong> — recommended alongside your national license</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>International credit card</strong> (Visa or Mastercard) — required for car rental deposit</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Document copies</strong> — paper set + email to yourself</span></label>
     </div>
-    <div id="map-ex">
-      <div class="map-fallback">
-        <p style="margin-bottom:8px;font-size:13px;color:var(--slate)">Interactive map: Arvada · Red Rocks · Rocky Mountain NP · Colorado Springs · Pikes Peak · Denver RiNo</p>
-        <a class="map-btn" style="margin-top:0" href="https://www.google.com/maps/dir/Arvada,+CO/Red+Rocks+Park+and+Amphitheatre,+Morrison,+CO/Rocky+Mountain+National+Park,+CO/Garden+of+the+Gods,+Colorado+Springs,+CO/Pikes+Peak,+CO/RiNo+Art+District,+Denver,+CO/@39.8,−105.5,9z" target="_blank" rel="noopener">Open in Google Maps ↗</a>
-      </div>
+
+    <div class="cl-cat">Insurance</div>
+    <div class="cl-group">
+      <label class="cl-item"><input type="checkbox" checked><span><strong>International medical insurance</strong> — covered by Visa Premier card · verify coverage limits and repatriation before departure</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Rental car insurance</strong> — decline the agency offer if your credit card already covers it</span></label>
     </div>
-    <div id="map-rt" style="display:none;">
-      <div class="map-fallback">
-        <p style="margin-bottom:8px;font-size:13px;color:var(--slate)">Road trip circuit: Arvada → Breckenridge → Aspen (Maroon Bells) → Black Canyon (Montrose) → Great Sand Dunes (Alamosa) → Royal Gorge → Arvada</p>
-        <a class="map-btn" style="margin-top:0" href="https://www.google.com/maps/dir/Arvada,+CO/Breckenridge,+CO/Aspen,+CO/Black+Canyon+of+the+Gunnison+National+Park,+CO/Great+Sand+Dunes+National+Park+and+Preserve,+CO/Royal+Gorge+Bridge+%26+Park,+Ca%C3%B1on+City,+CO/Arvada,+CO" target="_blank" rel="noopener">Open in Google Maps ↗</a>
-      </div>
+
+    <div class="cl-cat">Bookings &amp; Reservations</div>
+    <div class="cl-group">
+      <label class="cl-item"><input type="checkbox"><span><strong>Car rental</strong> — book early via Costco Travel or AutoEurope for best rates</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>America the Beautiful Pass</strong> — ~$80 · covers RMNP, Black Canyon, Great Sand Dunes</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>RMNP Timed Entry Permit</strong> — recreation.gov · sells out quickly in summer</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Maroon Bells shuttle</strong> — recreation.gov · mandatory · sells out weeks ahead in Jul–Aug</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Pikes Peak Cog Railway</strong> — book well in advance</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Red Rocks concert</strong> (if attending) — AXS / Ticketmaster · sells out in minutes</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Road trip hotels</strong> — Aspen · Moab · Montrose · Alamosa</span></label>
     </div>
-    <div id="map-full" style="display:none;">
-      <div class="map-fallback">
-        <p style="margin-bottom:8px;font-size:13px;color:var(--slate)">Complete 15-day circuit: Arvada — Red Rocks — RMNP — Colorado Springs — Breckenridge — Aspen — Maroon Bells — Black Canyon — Great Sand Dunes — Royal Gorge — Arvada</p>
-        <a class="map-btn" style="margin-top:0" href="https://www.google.com/maps/dir/Arvada,+CO/Breckenridge,+CO/Aspen,+CO/Black+Canyon+of+the+Gunnison+National+Park,+CO/Great+Sand+Dunes+National+Park+and+Preserve,+CO/Royal+Gorge+Bridge+%26+Park,+Ca%C3%B1on+City,+CO/Arvada,+CO" target="_blank" rel="noopener">Open full route in Google Maps ↗</a>
-      </div>
+
+    <div class="cl-cat">Connectivity</div>
+    <div class="cl-group">
+      <label class="cl-item"><input type="checkbox"><span><strong>Phone plan / SIM for the US</strong> — check roaming options or get a US eSIM before departure</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Google Maps offline</strong> — download Colorado &amp; Utah before departure (no signal in mountains)</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>recreation.gov account</strong> — needed for RMNP and Maroon Bells reservations</span></label>
     </div>
+
+    <div class="cl-cat">Gear &amp; Packing</div>
+    <div class="cl-group">
+      <label class="cl-item"><input type="checkbox"><span><strong>Hiking boots</strong> — ankle support for technical terrain</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Layering system</strong> — temps range from 23°F (-5°C) at Pikes Peak to 95°F (35°C) at Sand Dunes</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Water bottle 1.5L+</strong> per person</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Sunscreen SPF50+</strong> — intense UV at altitude</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Power adapter</strong> — US Type A/B (110V, 60Hz)</span></label>
+    </div>
+
+    <div class="cl-cat">Money</div>
+    <div class="cl-group">
+      <label class="cl-item"><input type="checkbox"><span><strong>Cash ~$100</strong> — for parking and small vendors</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Tips budget</strong> — 15–20% at restaurants, 10–15% taxi · culturally non-optional</span></label>
+      <label class="cl-item"><input type="checkbox"><span><strong>Sales tax awareness</strong> — prices displayed are pre-tax · add ~8–10%</span></label>
+    </div>
+
   </div>
 </div>
 
@@ -356,7 +337,7 @@ svg text{font-family:var(--font-body)}
     <button class="pt active" onclick="filterDays('all',this)">All days</button>
     <button class="pt" onclick="filterDays('arvada',this)">🏠 Arvada with M&R D1–D7</button>
     <button class="pt" onclick="filterDays('rt',this)">🚗 Road trip D8–D12</button>
-    <button class="pt" onclick="filterDays('fin',this)">🏁 End of stay D13–D15</button>
+    <button class="pt" onclick="filterDays('fin',this)">🏁 End of stay &amp; departure D13–D15</button>
   </div>
   <div id="days-container"></div>
 </div>
@@ -373,37 +354,7 @@ svg text{font-family:var(--font-body)}
   </div>
 </div>
 
-<!-- BUDGET SUMMARY -->
-<div class="section">
-  <div class="section-title">Budget Summary</div>
-  <div class="section-lead">Per person estimates — excludes flights, car rental (~$600–900 / 5 days) and America the Beautiful Pass (~$80)</div>
-  <div style="background:var(--card);border:1px solid var(--border);border-radius:3px;overflow:hidden;">
-    <table class="budget-table">
-      <thead><tr><th>Phase</th><th>Budget</th><th>Comfort</th><th>Premium</th></tr></thead>
-      <tbody>
-        <tr><td>D1–D7 · Arvada + day trips</td><td class="bmin-cell">~$420</td><td class="bconf-cell">~$900</td><td class="bprem-cell">~$1,500</td></tr>
-        <tr><td>D8–D12 · Road trip</td><td class="bmin-cell">~$490</td><td class="bconf-cell">~$1,250</td><td class="bprem-cell">~$2,500</td></tr>
-        <tr><td>D13–D15 · End of stay</td><td class="bmin-cell">~$130</td><td class="bconf-cell">~$290</td><td class="bprem-cell">~$560</td></tr>
-        <tr class="total-row"><td>Total estimate (15 days)</td><td class="bmin-cell"><strong>~$1,040</strong></td><td class="bconf-cell"><strong>~$2,440</strong></td><td class="bprem-cell"><strong>~$4,560</strong></td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p style="font-size:10px;font-weight:300;color:#9AABA2;margin-top:10px;">Accommodation D1–D7 and D13–D14 provided by friends · Comfort budget recommended with select premium upgrades (Red Rocks concert, Aspen dinner, Royal Gorge via ferrata)</p>
-</div>
 
-<!-- PRACTICAL NOTES -->
-<div class="section">
-  <div class="section-title">Practical Notes</div>
-  <div class="section-lead">Key reminders for a smooth trip</div>
-  <div class="note-grid">
-    <div class="note-card"><div class="note-title">Altitude & acclimatization</div><div class="note-text">Denver: 5,280 ft · Breckenridge: 9,600 ft · Trail Ridge Road: 14,259 ft. Drink 3L+ water/day, avoid alcohol first two days, watch for headaches.</div></div>
-    <div class="note-card"><div class="note-title">Priority reservations</div><div class="note-text">RMNP Timed Entry (recreation.gov), Maroon Bells shuttle, Royal Gorge Via Ferrata, Red Rocks concert, Pikes Peak Cog Railway. Book as soon as dates confirmed.</div></div>
-    <div class="note-card"><div class="note-title">Mustard allergy</div><div class="note-text">Always say: "I have a mustard allergy." Safer cuisines: Mexican, Japanese, American BBQ. Avoid standard dressings and pre-made sandwiches.</div></div>
-    <div class="note-card"><div class="note-title">Mountain weather</div><div class="note-text">Afternoon thunderstorms nearly daily in Jul–Aug. Start hikes before 1 PM. Bring a windbreaker even in full summer. Summit temps below 50°F (10°C) year-round.</div></div>
-    <div class="note-card"><div class="note-title">Independence Pass road</div><div class="note-text">Breckenridge→Aspen via CO-82 · 12,095 ft · Open mid-May to mid-Nov. Check conditions before driving. Alternative via US-50 adds ~2.5 hours.</div></note-text></div>
-    <div class="note-card"><div class="note-title">Great Sand Dunes</div><div class="note-text">Sand surface exceeds 150°F (65°C) after 1 PM. Arrive before 10 AM. Bring 3L+ water per person, SPF50+, hat. Sandboard rental ~$20 at park entrance.</div></div>
-  </div>
-</div>
 
 </div><!-- /container -->
 
@@ -436,15 +387,15 @@ function hideTip(){tt.style.opacity='0'}
 
 // ── CHART DATA ──
 const DAYS  = ['D1','D2','D3','D4','D5','D6','D7','D8','D9','D10','D11','D12','D13','D14','D15'];
-const PHASE = ['arvada','arvada','arvada','arvada','arvada','arvada','arvada','rt','rt','rt','rt','rt','fin','fin','dep'];
-const MILES = [25,20,110,110,10,10,5,125,80,175,155,170,15,10,25];
-const MILES_TIP = ['Arrival + transfer','Red Rocks + RiNo Denver','Rocky Mountain NP','Colorado Springs + Pikes Peak','Local Denver','Local Arvada','Prep day — packing & supplies','Arvada→Breckenridge→Aspen','Maroon Bells, Aspen explore','Aspen→Black Canyon (Montrose)','Montrose→Great Sand Dunes','Sand Dunes→Royal Gorge→Arvada','Denver day','Cherry Creek + Red Rocks','Airport transfer'];
+const PHASE = ['arvada','arvada','arvada','arvada','arvada','arvada','rt','rt','rt','rt','rt','rt','fin','fin','dep'];
+const MILES = [25,20,110,110,10,10,180,310,30,220,110,400,15,10,25];
+const MILES_TIP = ['Arrival + car pickup','Red Rocks + RiNo Denver','Rocky Mountain NP','Colorado Springs + Pikes Peak','Local Arvada','Local Arvada','Arvada→Aspen via Independence Pass','Aspen (Maroon Bells)→Moab','Moab local — Arches + Dead Horse','Moab→Black Canyon via Million Dollar Hwy','Black Canyon→Great Sand Dunes','Alamosa→Arvada','TBC','TBC','Airport transfer'];
 // Departure and return in decimal hours (null = no driving day)
 const DEPART = [16,6.5,6.75,7.5,null,null,null,8,6,8,7.5,7.5,null,8,null];
 const RETURN_ = [21,20,18,19,21,21,21,19,20,20,20,18,22,22,17];
 const TIME_TIP = ['Arrival 4PM → dinner with M&R 9PM','Red Rocks 6:30AM → RiNo 8PM','RMNP depart 6:45AM → back 6PM','CO Springs 7:30AM → back 7PM','Free day with M&R','Event at M&R','Prep day → dinner with M&R','Depart 8AM → Aspen 7PM','Maroon Bells 6AM → Montrose 8PM','Black Canyon 8AM → Montrose 8PM','Sand Dunes 7:30AM → Alamosa 8PM','Royal Gorge 7:30AM → Arvada 6PM','Flexible Denver day','Red Rocks hike → farewell dinner','Morning free → airport 1PM'];
 const BUDGET = [80,130,150,200,90,100,150,380,320,200,190,200,110,130,60];
-const BUDGET_TIP = ['Arrival dinner + transfer','Red Rocks + RiNo meals + brewery','RMNP entry + meals','Garden of Gods + Via Ferrata + Pikes Peak','Denver optional activities','Concert + transport','Supplies + dinner','Breckenridge MTB + Aspen hotel + meals','Maroon Bells + Aspen hotel + meals','Black Canyon + Montrose hotel + meals','Sand Dunes + Alamosa hotel + meals','Royal Gorge + transport back','Denver day activities + meals','Souvenirs + farewell dinner','Brunch + airport transfer'];
+const BUDGET_TIP = ['Arrival','Red Rocks + RiNo','RMNP','Colorado Springs + Pikes Peak','Free day','M&R event','Arvada→Aspen','Maroon Bells→Moab','Moab — Arches + Dead Horse','Moab→Black Canyon','Black Canyon→Sand Dunes','Sand Dunes→Arvada','TBC','TBC','Departure'];
 
 // ── PHASE COLORS ──
 const PC = {arvada:'#E8C070',rt:'#8898D0',fin:'#B898C8',dep:'#B8B8B8'};
@@ -506,14 +457,17 @@ function buildMilesChart(){
   svg.setAttribute('height', H + MARGIN.top + MARGIN.bottom);
   svg.setAttribute('viewBox', `0 0 ${W} ${H + MARGIN.top + MARGIN.bottom}`);
 
-  const maxV = Math.max(...MILES);
-  const yMax = Math.ceil(maxV / 50) * 50;
+  const convMilesArr = distUnit==='km' ? MILES.map(v=>Math.round(v*1.60934)) : MILES;
+  const maxV = Math.max(...convMilesArr);
+  const yMax = Math.ceil(maxV / 50) * 50 || 50;
   const scale = v => (v / yMax) * H;
 
   // Y ticks
   const yTicks = [];
   for(let v=0; v<=yMax; v+=50) yTicks.push(v);
-  drawGrid(svg, yTicks, scale, W, H, v=>v+'mi');
+  const conv = distUnit==='km' ? 1.60934 : 1;
+  const convMiles = MILES.map(v=>Math.round(v*conv));
+  drawGrid(svg, yTicks, scale, W, H, v=>Math.round(v*conv)+(distUnit==='km'?'km':'mi'));
 
   // Avg line
   const avg = Math.round(MILES.reduce((a,b)=>a+b,0)/MILES.length);
@@ -527,14 +481,14 @@ function buildMilesChart(){
   const avgTxt = document.createElementNS('http://www.w3.org/2000/svg','text');
   avgTxt.setAttribute('x', W - MARGIN.right + 2); avgTxt.setAttribute('y', avgY + 4);
   avgTxt.setAttribute('font-size','9'); avgTxt.setAttribute('fill','#A8522A');
-  avgTxt.textContent = 'avg '+avg+'mi';
+  avgTxt.textContent = 'avg '+avg+(distUnit==='km'?'km':'mi');
   svg.appendChild(avgTxt);
 
   // Bars
   const step = (W - MARGIN.left - MARGIN.right) / MILES.length;
   const bw   = Math.max(8, step * 0.55);
-  MILES.forEach((v,i)=>{
-    const cx = dayX(i, W, MILES.length);
+  convMilesArr.forEach((v,i)=>{
+    const cx = dayX(i, W, convMilesArr.length);
     const bh = Math.max(2, scale(v));
     const by = MARGIN.top + H - bh;
     const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
@@ -545,145 +499,13 @@ function buildMilesChart(){
     rect.setAttribute('stroke', PD[PHASE[i]]);
     rect.setAttribute('stroke-width','0.5');
     rect.style.cursor = 'default';
-    rect.addEventListener('mouseenter', e=>showTip(e, `${DAYS[i]}: ${v} mi — ${MILES_TIP[i]}`));
+    rect.addEventListener('mouseenter', e=>showTip(e, `${DAYS[i]}: ${v} ${distUnit} — ${MILES_TIP[i]}`));
     rect.addEventListener('mousemove',  e=>moveTip(e));
     rect.addEventListener('mouseleave', hideTip);
     svg.appendChild(rect);
   });
 
   // X axis baseline
-  const base = document.createElementNS('http://www.w3.org/2000/svg','line');
-  base.setAttribute('x1', MARGIN.left); base.setAttribute('x2', W - MARGIN.right);
-  base.setAttribute('y1', MARGIN.top + H); base.setAttribute('y2', MARGIN.top + H);
-  base.setAttribute('stroke','#D8E2DC'); base.setAttribute('stroke-width','1');
-  svg.appendChild(base);
-
-  drawDayLabels(svg, W, H);
-}
-
-// ── CHART 2: Gantt (departure–return) ──
-function buildTimesChart(){
-  const svg = document.getElementById('svg-times');
-  const W   = getW(svg);
-  const H   = 240;
-  svg.setAttribute('height', H + MARGIN.top + MARGIN.bottom);
-  svg.setAttribute('viewBox', `0 0 ${W} ${H + MARGIN.top + MARGIN.bottom}`);
-
-  // Y axis: 5 AM (top) to 11 PM (bottom) — fits all departures (earliest 6AM) and returns (latest 10PM)
-  const yMin = 5, yMax = 23, yRange = yMax - yMin;
-  const timeScale = h => ((h - yMin) / yRange) * H;   // px from top
-
-  // Y gridlines & labels every 2h
-  const yTicks = [];
-  for(let h=6; h<=22; h+=2) yTicks.push(h);
-  yTicks.forEach(h=>{
-    const y = MARGIN.top + timeScale(h);
-    const line = document.createElementNS('http://www.w3.org/2000/svg','line');
-    line.setAttribute('x1', MARGIN.left); line.setAttribute('x2', W - MARGIN.right);
-    line.setAttribute('y1', y); line.setAttribute('y2', y);
-    line.setAttribute('stroke','#E4EAE6'); line.setAttribute('stroke-width','1');
-    svg.appendChild(line);
-    const lbl = h === 12 ? '12 PM' : h < 12 ? h+'AM' : (h-12)+'PM';
-    const txt = document.createElementNS('http://www.w3.org/2000/svg','text');
-    txt.setAttribute('x', MARGIN.left - 7); txt.setAttribute('y', y + 3.5);
-    txt.setAttribute('text-anchor','end'); txt.setAttribute('font-size','9');
-    txt.setAttribute('fill','#A8B8B0');
-    txt.textContent = lbl;
-    svg.appendChild(txt);
-  });
-
-  // Bars (departure → return)
-  const step = (W - MARGIN.left - MARGIN.right) / DAYS.length;
-  const bw   = Math.max(8, step * 0.55);
-  DAYS.forEach((d,i)=>{
-    const cx  = dayX(i, W, DAYS.length);
-    // determine effective departure
-    let dep  = DEPART[i];
-    let ret  = RETURN_[i];
-    // D1: arrival only — show short bar at arrival time (16h)
-    if(i===0){ dep=16; ret=16.5; }
-    // D15: departure to airport at 13h, flight 17h
-    if(i===14){ dep=13; ret=17; }
-
-    const y1 = MARGIN.top + timeScale(dep || 8);
-    const y2 = MARGIN.top + timeScale(ret);
-    const bh = Math.max(4, y2-y1);
-
-    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-    rect.setAttribute('x', cx - bw/2); rect.setAttribute('y', y1);
-    rect.setAttribute('width', bw); rect.setAttribute('height', bh);
-    rect.setAttribute('rx','3');
-    rect.setAttribute('fill', PC[PHASE[i]]);
-    rect.setAttribute('stroke', PD[PHASE[i]]);
-    rect.setAttribute('stroke-width','0.5');
-    rect.style.cursor='default';
-    rect.addEventListener('mouseenter',e=>showTip(e,`${DAYS[i]} — ${TIME_TIP[i]}`));
-    rect.addEventListener('mousemove',e=>moveTip(e));
-    rect.addEventListener('mouseleave',hideTip);
-    svg.appendChild(rect);
-  });
-
-  // Baseline
-  const base = document.createElementNS('http://www.w3.org/2000/svg','line');
-  base.setAttribute('x1', MARGIN.left); base.setAttribute('x2', W - MARGIN.right);
-  base.setAttribute('y1', MARGIN.top); base.setAttribute('y2', MARGIN.top);
-  base.setAttribute('stroke','#D8E2DC'); base.setAttribute('stroke-width','1');
-  svg.appendChild(base);
-
-  drawDayLabels(svg, W, H);
-}
-
-// ── CHART 3: Budget bars ──
-function buildBudgetChart(){
-  const svg = document.getElementById('svg-budget');
-  const W   = getW(svg);
-  const H   = 160;
-  svg.setAttribute('height', H + MARGIN.top + MARGIN.bottom);
-  svg.setAttribute('viewBox', `0 0 ${W} ${H + MARGIN.top + MARGIN.bottom}`);
-
-  const maxV = Math.max(...BUDGET);
-  const yMax = Math.ceil(maxV / 100) * 100;
-  const scale = v => (v / yMax) * H;
-
-  const yTicks = [];
-  for(let v=0; v<=yMax; v+=100) yTicks.push(v);
-  drawGrid(svg, yTicks, scale, W, H, v=>'$'+v);
-
-  // Avg
-  const avg = Math.round(BUDGET.reduce((a,b)=>a+b,0)/BUDGET.length);
-  const avgY = MARGIN.top + H - scale(avg);
-  const avgLine = document.createElementNS('http://www.w3.org/2000/svg','line');
-  avgLine.setAttribute('x1', MARGIN.left); avgLine.setAttribute('x2', W - MARGIN.right);
-  avgLine.setAttribute('y1', avgY); avgLine.setAttribute('y2', avgY);
-  avgLine.setAttribute('stroke','#A8522A'); avgLine.setAttribute('stroke-width','1.5');
-  avgLine.setAttribute('stroke-dasharray','5,3');
-  svg.appendChild(avgLine);
-  const avgTxt = document.createElementNS('http://www.w3.org/2000/svg','text');
-  avgTxt.setAttribute('x', W - MARGIN.right + 2); avgTxt.setAttribute('y', avgY + 4);
-  avgTxt.setAttribute('font-size','9'); avgTxt.setAttribute('fill','#A8522A');
-  avgTxt.textContent = 'avg $'+avg;
-  svg.appendChild(avgTxt);
-
-  const step = (W - MARGIN.left - MARGIN.right) / BUDGET.length;
-  const bw   = Math.max(8, step * 0.55);
-  BUDGET.forEach((v,i)=>{
-    const cx = dayX(i, W, BUDGET.length);
-    const bh = Math.max(2, scale(v));
-    const by = MARGIN.top + H - bh;
-    const rect = document.createElementNS('http://www.w3.org/2000/svg','rect');
-    rect.setAttribute('x', cx - bw/2); rect.setAttribute('y', by);
-    rect.setAttribute('width', bw); rect.setAttribute('height', bh);
-    rect.setAttribute('rx','2');
-    rect.setAttribute('fill', PC[PHASE[i]]);
-    rect.setAttribute('stroke', PD[PHASE[i]]);
-    rect.setAttribute('stroke-width','0.5');
-    rect.style.cursor='default';
-    rect.addEventListener('mouseenter',e=>showTip(e,`${DAYS[i]}: $${v} — ${BUDGET_TIP[i]}`));
-    rect.addEventListener('mousemove',e=>moveTip(e));
-    rect.addEventListener('mouseleave',hideTip);
-    svg.appendChild(rect);
-  });
-
   const base = document.createElementNS('http://www.w3.org/2000/svg','line');
   base.setAttribute('x1', MARGIN.left); base.setAttribute('x2', W - MARGIN.right);
   base.setAttribute('y1', MARGIN.top + H); base.setAttribute('y2', MARGIN.top + H);
@@ -707,36 +529,44 @@ function appendLegend(svgId){
   container.appendChild(leg);
 }
 
-window.addEventListener('load',()=>{
+let distUnit = 'mi';
+function setUnit(u){
+  distUnit = u;
+  document.getElementById('btn-mi').classList.toggle('active', u==='mi');
+  document.getElementById('btn-km').classList.toggle('active', u==='km');
+  document.getElementById('miles-sub').textContent = u==='mi'
+    ? 'Miles per day — dashed line shows trip average'
+    : 'Kilometers per day — dashed line shows trip average';
+  rebuildMiles();
+}
+function rebuildMiles(){
+  const svg = document.getElementById('svg-miles');
+  svg.innerHTML='';
+  const leg = svg.parentElement.querySelector('div[style*="flex"]');
+  if(leg) leg.remove();
   buildMilesChart(); appendLegend('svg-miles');
-  buildTimesChart(); appendLegend('svg-times');
-  buildBudgetChart(); appendLegend('svg-budget');
-});
-window.addEventListener('resize',()=>{
-  ['svg-miles','svg-times','svg-budget'].forEach(id=>{
-    document.getElementById(id).innerHTML='';
-    const leg = document.getElementById(id).parentElement.querySelector('div[style*="flex"]');
-    if(leg) leg.remove();
-  });
-  buildMilesChart(); appendLegend('svg-miles');
-  buildTimesChart(); appendLegend('svg-times');
-  buildBudgetChart(); appendLegend('svg-budget');
-});
+}
+window.addEventListener('load',()=>{ buildMilesChart(); appendLegend('svg-miles'); });
+window.addEventListener('resize', rebuildMiles);
 
 // ── DAY CARDS DATA ──
 const PHOTOS={
+  D1:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGPjZTAmgDMTCh2Uh4zUBbEW9FEdG319eKpd_ZSq_CXxBXPswYUlsSSQDkHZpy9_k69V4WJGmw_9cv84kCZPvvksz0fxWl7tozIE6Bw171c9zNcbIZ_ZhPvVHn7d7oqNj_LjmWJ_z4Zjhoe=s800-w800-h600',credit:'Downtown Denver'},
   D2:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNF-_3m1YZYwTNk_L1HzystuEpxEaFXbTUtXSsPgRkFWYl010BjqRehANi0SvCO5rOmgd_c19ymFWxeaBGpqeMgAnqDGDIF9atSdskocRbFySDwg_fb5UnSjHBVGFLXupS3M6ZYYxRPUPCcjiQ=s800-w800-h600',credit:'Red Rocks Amphitheatre'},
   D3:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNFyfsiYWB7g34empZGadXqdhTvGH3p9NKg1A3OcDmsqR9U800uwfdZONkzIRSJK5DDl4eqSgsKi9v8O6mgxBh_8h4NsRlt7LE9-ld60bB21nMC5mjVUwNTR01NFjz0epKydhYqgyRTFla7-wQ=s800-w800-h600',credit:'Rocky Mountain National Park'},
   D4:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNFp8Cb_M___iJB1n5oKbxOrIZvO6XH5oVuJwAsduhczkDIkpNzsGz9i8MVzNZGWCsagAUSegvXlPkKdmBFePh5NDgXaMZ6h1wmsWZfkTpLQU6xN4hVkKbO03i_CpjpfAQCHOwEwlZ6Ry551=s800-w800-h600',credit:'Garden of the Gods'},
   D5:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGPjZTAmgDMTCh2Uh4zUBbEW9FEdG319eKpd_ZSq_CXxBXPswYUlsSSQDkHZpy9_k69V4WJGmw_9cv84kCZPvvksz0fxWl7tozIE6Bw171c9zNcbIZ_ZhPvVHn7d7oqNj_LjmWJ_z4Zjhoe=s800-w800-h600',credit:'Downtown Denver'},
+  D5:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGPjZTAmgDMTCh2Uh4zUBbEW9FEdG319eKpd_ZSq_CXxBXPswYUlsSSQDkHZpy9_k69V4WJGmw_9cv84kCZPvvksz0fxWl7tozIE6Bw171c9zNcbIZ_ZhPvVHn7d7oqNj_LjmWJ_z4Zjhoe=s800-w800-h600',credit:'Denver — free day'},
   D6:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNESErL4e0sf2qsr014XbmbzZowC2fE5rbct7sSrOQxTMa-YPVrhBajH72bkm_u-uwpfbwfNkUpBw2bI6SH7ml9JDhDXO3wXOcOU3GJa2-YS3bXxXymk-flhClCc9o8mqvR1HNcM_DNw5w_ZwOc=s800-w800-h600',credit:'Red Rocks Amphitheatre'},
-  D8:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGs_by-zYS-eIThp3LFD45FkaL5YV5aGzoUVeJtX9af9qGQG-AD9yhhBpN_2IVFCBeoX_XOv8582_8LXgKobjut737d42a4GdfZt_jKkoVPRAXnXx3SYNcT-EG93yEw0pRRi1QFO68eereG=s800-w700-h367',credit:'Breckenridge'},
-  D9:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNEmMJIP0wVaTaCYg7udDwh3VOE4aXk-sHx8jN1AO1TTWSXNOdBjB-GcZIXdFqjsoTOCmbmPuuoYlAPj_cAnv1wPfDEgrref4kv1WmXh9R1ua5Ba9RRECiAtMfVcvs8-ZKLwlRT7jAiUZfiOtA=s800-w800-h600',credit:'Maroon Bells'},
+  D7:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNEmMJIP0wVaTaCYg7udDwh3VOE4aXk-sHx8jN1AO1TTWSXNOdBjB-GcZIXdFqjsoTOCmbmPuuoYlAPj_cAnv1wPfDEgrref4kv1WmXh9R1ua5Ba9RRECiAtMfVcvs8-ZKLwlRT7jAiUZfiOtA=s800-w800-h600',credit:'Maroon Bells / Aspen'},
+  D8:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNEmMJIP0wVaTaCYg7udDwh3VOE4aXk-sHx8jN1AO1TTWSXNOdBjB-GcZIXdFqjsoTOCmbmPuuoYlAPj_cAnv1wPfDEgrref4kv1WmXh9R1ua5Ba9RRECiAtMfVcvs8-ZKLwlRT7jAiUZfiOtA=s800-w800-h600',credit:'Maroon Bells'},
+  D9:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNE9Zi7FwtoMDgfyAivOCVJIA14dTUiVaJ1H_2e6ZSG4nPLqfj1hTObt8XqHy8SXcs7ahoyDkLQjbdSbbrc9JQPO7meJ5zlIsIPq2CZtP8vWMN3JdGax19oxOvLgS8CJqXdqNrNNls1suAQ8xnQ=s800-w800-h600',credit:'Arches National Park / Moab'},
   D10:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGxeiGMedZ18cHE3blg5yUFHXpe7Mdi564lOZXSQXoQPxDMmD-SrDJ2vmbchS2Q9nsyfkYGl3H1TnemZS0tSs4iyjLK0sFe7lGaUvIWQGMdsM2YaImWRVvPBJe3jxqmRozKzYCAQYwUTlwyOQ=s800-w800-h600',credit:'Black Canyon of the Gunnison NP'},
   D11:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNE9Zi7FwtoMDgfyAivOCVJIA14dTUiVaJ1H_2e6ZSG4nPLqfj1hTObt8XqHy8SXcs7ahoyDkLQjbdSbbrc9JQPO7meJ5zlIsIPq2CZtP8vWMN3JdGax19oxOvLgS8CJqXdqNrNNls1suAQ8xnQ=s800-w800-h600',credit:'Great Sand Dunes NP'},
-  D12:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNEDT8j-rolc6Kf8RpH3j7Uo453dr41XhLt6pFapRHZoNGgyU-DpfaHnmvkd6JRuM14cFAoSf4RCMCY5mjwm-Fgk-RZlj2MPFaLYAH-2TQzfPW9Fujv_je3nUCZxD_ljyKqKBCPEPsHlC1Zd=s800-w800-h600',credit:'Royal Gorge Bridge'},
+  D12:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNE9Zi7FwtoMDgfyAivOCVJIA14dTUiVaJ1H_2e6ZSG4nPLqfj1hTObt8XqHy8SXcs7ahoyDkLQjbdSbbrc9JQPO7meJ5zlIsIPq2CZtP8vWMN3JdGax19oxOvLgS8CJqXdqNrNNls1suAQ8xnQ=s800-w800-h600',credit:'Great Sand Dunes NP'},
   D13:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGRtmZarTUU-J4Ip6789J0bFm2Tj953BgsLxzphk4hlT4sMV_xJ2ly9va760znFt-FYzHWQ5B1Ykl6mL6woV-Es1fjiB4TJljhcD2X3b3pYWsYIwyX4j1Ny_Ehp8Fla3YZl8XQvb75ypauthQ=s800-w800-h600',credit:'Downtown Denver'},
   D14:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNF-_3m1YZYwTNk_L1HzystuEpxEaFXbTUtXSsPgRkFWYl010BjqRehANi0SvCO5rOmgd_c19ymFWxeaBGpqeMgAnqDGDIF9atSdskocRbFySDwg_fb5UnSjHBVGFLXupS3M6ZYYxRPUPCcjiQ=s800-w800-h600',credit:'Red Rocks Park'},
+  D15:{url:'https://lh3.googleusercontent.com/place-photos/AL8-SNGPjZTAmgDMTCh2Uh4zUBbEW9FEdG319eKpd_ZSq_CXxBXPswYUlsSSQDkHZpy9_k69V4WJGmw_9cv84kCZPvvksz0fxWl7tozIE6Bw171c9zNcbIZ_ZhPvVHn7d7oqNj_LjmWJ_z4Zjhoe=s800-w800-h600',credit:'Denver — departure day'},
 };
 const MAP_LINKS={
   D2:'https://maps.google.com/?cid=8972268900862187181',
@@ -753,23 +583,24 @@ const MAP_LINKS={
 const days=[
   {num:'D1',phase:'arvada',tag:'Arvada',title:'Arrival in Denver',subtitle:'Landing ~4 PM — settling in Arvada',
    hebergement:'Arvada M&R',
-   activites:[{t:'4:00 PM',x:'Landing at Denver International Airport (DEN)'},{t:'5:00 PM',x:'Baggage claim + transfer to Arvada (~40 min)'},{t:'6:00 PM',x:'Pick up car rental (Denver airport or local agency on the way)'},{t:'7:00 PM',x:'Arrival at M&R :)'},{t:'Evening',x:'Dinner with M&R'}],
+   activites:[{t:'4:00 PM',x:'Landing at Denver International Airport (DEN)'},{t:'5:00 PM',x:'Baggage claim + transfer to Arvada (~40 min)'},{t:'6:00 PM',x:'Pick up car rental (Denver airport or local agency on the way)'},{t:'7:00 PM',x:'Arrival at M&R '},{t:'Evening',x:'Dinner with M&R'}],
    tips:'',
    budget:{min:'~$50',conf:'~$80',prem:'~$100'},bn:'Transfer + Car rental pickup + dinner'},
-  {num:'D2',phase:'arvada',tag:'Day trip',title:'Red Rocks Park + Denver RiNo',subtitle:"Sunrise at the rocks, then Denver's coolest neighborhood",
+  {num:'D2',phase:'arvada',tag:'Day trip',title:'Red Rocks Park + Denver RiNo',subtitle:"Sunrise at the rocks, then Denver's coolest neighborhood — D2/D3/D4 flexible order",
    hebergement:'Arvada M&R',
    activites:[{t:'6:30 AM',x:"<span class='magic'>Red Rocks Park — arrive before dawn</span> (30 min from Arvada)"},{t:'8:30 AM',x:'Trading Post Trail hike (2 mi) — free, no ticket needed'},{t:'10:30 AM',x:'Back to Arvada'},{t:'2:00 PM',x:'Denver: RiNo Art District — murals, galleries, The Source Market Hall'},{t:'Evening',x:'Explore RiNo at your own pace — craft breweries, restaurants, street art all within walking distance'}],
    tips:'Red Rocks Park (no concert): open 24/7, free parking in the morning. Arrive 6:45 AM for golden light. Uber RiNo↔Arvada ~$20. RiNo has some of the best craft breweries in Denver — M&R will know the good spots.',
    budget:{min:'~$60',conf:'~$130',prem:'~$200'},bn:'Transport + meals + drinks'},
-  {num:'D3',phase:'arvada',tag:'Day trip',title:'Rocky Mountain National Park',subtitle:'Alpine lakes, wildlife, Trail Ridge Road — full day',
-   hebergement:'Return to Arvada — or hotel in Estes Park (The Stanley Hotel)',
-   activites:[{t:'6:45 AM',x:'Early departure Arvada → RMNP Fall River Entrance (1h45)'},{t:'8:30 AM',x:"<span class='magic'>Bear Lake: Emerald Lake Trail</span> (3.5 mi, 700 ft gain) — glacial alpine lakes"},{t:'12:00 PM',x:'Picnic at altitude or lunch in Estes Park'},{t:'1:30 PM',x:'Trail Ridge Road — drive to 14,259 ft. Wildlife: elk, pikas, marmots'},{t:'4:00 PM',x:'Alpine Visitor Center at summit'},{t:'5:30 PM',x:'Return or overnight Estes Park'}],
+  {num:'D3',phase:'arvada',tag:'Day trip',title:'Rocky Mountain National Park',subtitle:'Alpine lakes, wildlife, Trail Ridge Road — D2/D3/D4 can be done in any order',
+   hebergement:'Arvada M&R',
+   activites:[{t:'6:45 AM',x:'Early departure Arvada → RMNP Fall River Entrance (1h45)'},{t:'8:30 AM',x:"<span class='magic'>Bear Lake: Emerald Lake Trail</span> (3.5 mi, 700 ft gain) — glacial alpine lakes"},{t:'12:00 PM',x:'Picnic at altitude or lunch in Estes Park'},{t:'1:30 PM',x:'Trail Ridge Road — drive to 14,259 ft. Wildlife: elk, pikas, marmots'},{t:'4:00 PM',x:'Alpine Visitor Center at summit'},{t:'5:30 PM',x:'Return to Arvada M&R'}],
    tips:'Timed Entry Permit required in summer (~$2, recreation.gov). America the Beautiful Pass (~$80) covers all NPs on this trip. Pack a warm layer for altitude.',
    budget:{min:'~$70',conf:'~$150',prem:'~$280'},bn:'Park entry + transport + meals'},
-  {num:'D4',phase:'arvada',tag:'Day trip',title:'Colorado Springs + Garden of the Gods + Pikes Peak',subtitle:'Red sandstone formations + 14,115 ft summit',
-   hebergement:'Return to Arvada',
-   activites:[{t:'7:30 AM',x:'Depart Arvada → Colorado Springs (1h15 via I-25 S)'},{t:'9:00 AM',x:"<span class='magic'>Garden of the Gods</span> — red sandstone against Pikes Peak backdrop (free)"},{t:'11:00 AM',x:'Option: Royal Gorge Via Ferrata (30 min away) — aerial canyon traverse'},{t:'1:00 PM',x:'Lunch in Colorado Springs — The Rabbit Hole or Bristol Brewing'},{t:'2:30 PM',x:'Pikes Peak: drive up ($20) or cog railway ($40, book ahead)'},{t:'5:30 PM',x:'Return to Arvada'}],
-   tips:'Royal Gorge Via Ferrata: mandatory online booking (~$49–69), level B/C. Cog Railway: book well in advance. Summit is <50°F (<10°C) even in July.',
+  {num:'D4',phase:'arvada',tag:'Day trip',title:'Colorado Springs + Garden of the Gods + Pikes Peak',subtitle:'Red sandstone formations + 14,115 ft summit — D2/D3/D4 flexible order',
+   hebergement:'Arvada M&R',
+   activites:[{t:'7:30 AM',x:'Depart Arvada → Colorado Springs (1h15 via I-25 S)'},{t:'9:00 AM',x:"<span class='magic'>Garden of the Gods</span> — red sandstone against Pikes Peak backdrop (free)"},{t:'1:00 PM',x:'Lunch in Colorado Springs — The Rabbit Hole or Bristol Brewing'},{t:'2:30 PM',x:"<span class='magic'>Pikes Peak Cog Railway</span> — book well in advance · summit 14,115 ft (4,302 m)"},{t:'6:00 PM',x:'Return to Arvada'}],
+   tips:'Cog Railway: must be booked well in advance online. Summit is <50°F (<10°C) even in July — bring a warm layer. Garden of the Gods is free access.',
+
    budget:{min:'~$80',conf:'~$200',prem:'~$300'},bn:'Transport + activities + meals'},
   {num:'D5',phase:'arvada',tag:'Free time',title:'Free day in Arvada',subtitle:'Relaxed day with M&R — options for the evening',
    hebergement:'Arvada M&R',
@@ -781,51 +612,51 @@ const days=[
    activites:[{t:'Morning',x:'Free time with friends'},{t:'Afternoon',x:'Option: cycling South Platte Trail (Denver) or Ralston Creek Trail (Arvada)'},{t:'Evening',x:'Event at M&R'}],
    tips:"A quieter day before the road trip prep. Good opportunity for laundry, packing research, and recharging.",
    budget:{min:'~$20',conf:'~$50',prem:'~$80'},bn:'Local activities only'},
-  {num:'D7',phase:'arvada',tag:'Transition',title:'Road trip prep day',subtitle:'Packing, last supplies, last dinner with M&R',
+  {num:'D7',phase:'rt',tag:'Road trip',title:'Arvada → Aspen',subtitle:'Independence Pass drive + Aspen afternoon',
+   hebergement:'Proposed by Claude: Limelight Aspen ★★★★ (comfort) · or Hotel Aspen as alternative',
+   activites:[{t:'8:00 AM',x:'Depart Arvada — fill up car and stock cooler before leaving the city'},{t:'10:30 AM',x:"<span class='magic'>Independence Pass</span> (CO-82) — 12,095 ft summit, spectacular views. Check road conditions before departure"},{t:'11:30 AM',x:'Arrive Aspen — check in, drop bags'},{t:'1:00 PM',x:'Lunch in Aspen — explore the town, boutiques, galleries'},{t:'3:00 PM',x:'Afternoon walk: Maroon Creek Road views, Aspen Mountain base, downtown'},{t:'7:00 PM',x:'Dinner in Aspen — Cache Cache or Explore Booksellers area'}],
+   tips:'Independence Pass: open mid-May to mid-Nov — verify conditions before driving. Aspen: 3h free parking downtown. Buy America the Beautiful Pass (~$80) if not already done.',
+   budget:{min:'~$160',conf:'~$320',prem:'~$600'},bn:'Drive + Aspen hotel + meals'},
+  {num:'D8',phase:'rt',tag:'Road trip',title:'Maroon Bells → Moab',subtitle:'Iconic sunrise at the lake then drive to Utah',
+   hebergement:'Proposed by Claude: Hoodoo Moab Hotel (comfort) · or Element Moab as alternative',
+   activites:[{t:'6:00 AM',x:"<span class='magic'>Maroon Bells shuttle at opening</span> (~$8 from Aspen Highlands) — lake reflection at sunrise, unmissable"},{t:'7:00 AM',x:"<span class='magic'>Maroon Lake</span> — Crater Lake Trail (3 mi, 180 ft gain). Maroon Bells: 14,009 ft & 14,019 ft"},{t:'10:00 AM',x:'Return shuttle to Aspen Highlands · quick lunch in Aspen'},{t:'12:30 PM',x:"<span class='magic'>Drive Aspen → Moab</span> (4h30 via CO-82 E + I-70 W + US-191 S) — dramatic canyon landscapes through the Book Cliffs"},{t:'5:00 PM',x:'Arrive Moab — check in, explore Main Street'},{t:'7:00 PM',x:'Dinner in Moab — Moab Brewery or Desert Bistro'}],
+   tips:'Maroon Bells shuttle: mandatory reservation at recreation.gov — book weeks ahead for Jul–Aug. Aspen→Moab drive is long but scenic; start early. Moab at 4,026 ft — warm evenings.',
+   budget:{min:'~$120',conf:'~$280',prem:'~$500'},bn:'Shuttle + drive + Moab hotel + meals'},
+  {num:'D9',phase:'rt',tag:'Road trip',title:'Moab — Arches & Dead Horse Point',subtitle:'Red rock arches, canyon overlooks — a full Utah day',
+   hebergement:'Proposed by Claude: Hoodoo Moab Hotel (2nd night)',
+   activites:[{t:'7:00 AM',x:"<span class='magic'>Arches National Park</span> — start early before the heat. Delicate Arch Trail (3 mi, 480 ft gain): the iconic arch at sunrise"},{t:'10:00 AM',x:'Windows Section: Double Arch, North & South Windows — short walk, spectacular formations'},{t:'12:00 PM',x:'Picnic in the park or lunch back in Moab'},{t:'2:00 PM',x:"<span class='magic'>Dead Horse Point State Park</span> (30 min from Moab) — one of the most jaw-dropping viewpoints in the USA: Colorado River meanders 2,000 ft below"},{t:'5:00 PM',x:'Return to Moab — relax, swim at hotel if available'},{t:'7:00 PM',x:'Dinner in Moab — Pasta Jay\'s or The Sunset Grill for canyon views'}],
+   tips:'Arches NP: timed entry permit required in peak season (recreation.gov, ~$2). Dead Horse Point: $20 state park entry. Bring 3L+ water — Moab summer temps can exceed 100°F (38°C). Canyonlands NP also nearby if time allows.',
+   budget:{min:'~$80',conf:'~$160',prem:'~$300'},bn:'Park entries + meals + Moab hotel'},
+  {num:'D10',phase:'rt',tag:'Road trip',title:'Moab → Black Canyon of the Gunnison',subtitle:'Long scenic drive + canyon arrival — via Million Dollar Highway if desired',
+   hebergement:'Proposed by Claude: Hampton Inn Montrose (comfort) · or TownePlace Suites as alternative',
+   activites:[{t:'8:00 AM',x:'Depart Moab → Montrose (3h30 via US-191 N + US-50 W) — or take the longer but spectacular Million Dollar Highway option'},{t:'8:00 AM',x:"<span class='magic'>Million Dollar Highway option</span> (adds ~2h): Moab → Ouray via US-191 + CO-550 → Silverton → Durango → Montrose. Some of the most dramatic mountain road in the USA"},{t:'12:00 PM',x:'Arrive Ouray or Silverton (if taking MDH) — lunch stop'},{t:'2:00 PM',x:'Continue to Montrose — check in'},{t:'4:00 PM',x:"<span class='magic'>Black Canyon NP — late afternoon</span>: South Rim drive, Gunnison Point overlook, Painted Wall View in afternoon light"},{t:'7:00 PM',x:'Dinner in Montrose — The Brickhouse 700'}],
+   tips:'Million Dollar Highway (US-550 Ouray→Silverton): sheer cliffs, no guardrails, 11,000+ ft passes — one of the great American drives. No extra cost, just time. Discuss with your group the day before. Black Canyon: also great at golden hour.',
+   budget:{min:'~$100',conf:'~$220',prem:'~$380'},bn:'Long drive + park entry + Montrose hotel + meals'},
+  {num:'D11',phase:'rt',tag:'Road trip',title:'Black Canyon → Great Sand Dunes',subtitle:'Morning canyon, afternoon drive to the dunes',
+   hebergement:'Proposed by Claude: Hampton Inn Alamosa (comfort) · or Great Sand Dunes campground for the adventurous',
+   activites:[{t:'8:00 AM',x:"<span class='magic'>Black Canyon NP morning</span> — South Rim: Painted Wall View, Warner Point Nature Trail (2 mi). Best light of the day"},{t:'11:00 AM',x:'Depart Montrose → Great Sand Dunes NP (2h30 via US-285 S)'},{t:'1:30 PM',x:'Arrive Great Sand Dunes — rent sandboard (~$20) at park entrance'},{t:'2:00 PM',x:"<span class='magic'>Climb High Dune</span> (850 ft gain, ~2.5h on loose sand) — arrive early afternoon to avoid peak heat"},{t:'4:30 PM',x:'Sandboard the dunes · Medano Creek wading (best May–July)'},{t:'6:00 PM',x:'Drive to Alamosa (~45 min) · dinner at San Luis Valley Brewing Co.'}],
+   tips:'Black Canyon morning: Painted Wall is best in direct morning light. Sand Dunes: surface still hot in early afternoon — bring 3L+ water, max sunscreen, hat. Start dune climb no later than 2 PM.',
+   budget:{min:'~$80',conf:'~$190',prem:'~$300'},bn:'Black Canyon + Sand Dunes entries + Alamosa hotel + meals'},
+  {num:'D12',phase:'rt',tag:'Road trip',title:'Great Sand Dunes → Arvada',subtitle:'Morning at the dunes then long drive back',
    hebergement:'Arvada M&R',
-   activites:[{t:'Morning',x:'Free time — last morning with M&R before hitting the road'},{t:'Afternoon',x:'Stock cooler, mountain snacks, water · pack bags · plan route · check Independence Pass conditions'},{t:'Evening',x:'Pre-trip dinner with M&R — BBQ or Colorado steakhouse'}],
-   tips:'Fill up the car in Arvada before leaving (cheaper than mountain gas stations). Download offline maps for the full circuit. Buy America the Beautiful Pass here if not already done (~$80, covers all NPs).',
-   budget:{min:'~$60',conf:'~$100',prem:'~$150'},bn:'Supplies + dinner'},
-  {num:'D8',phase:'rt',tag:'Road trip',title:'Arvada → Breckenridge → Aspen',subtitle:'Downhill MTB + first mountain night',
-   hebergement:'Aspen — Limelight Aspen ★★★★ (comfort) or Hotel Aspen',
-   activites:[{t:'8:00 AM',x:'Optional Boulder stopover (45 min) — Flatirons, Pearl Street brunch'},{t:'10:00 AM',x:'Drive Arvada → Breckenridge (1h45 via I-70 W)'},{t:'11:00 AM',x:'Breckenridge Bike Park: downhill MTB, chairlift laps, jump lines (~$50–70/day)'},{t:'2:30 PM',x:"Lunch in Breck: Clint's Bakery or Crepes A La Cart"},{t:'4:00 PM',x:'Drive Breckenridge → Aspen (1h50 via CO-82 — Independence Pass 12,095 ft)'},{t:'6:30 PM',x:'Check in Aspen · dinner: Cache Cache or Prospect'}],
-   tips:"Independence Pass: verify it's open before driving. Aspen: 3-hour free parking downtown.",
-   budget:{min:'~$160',conf:'~$380',prem:'~$650'},bn:'MTB + Aspen accommodation + meals'},
-  {num:'D9',phase:'rt',tag:'Road trip',title:'Maroon Bells — Sunrise',subtitle:"Colorado's most iconic image — alpine lake reflection",
-   hebergement:'Aspen (2nd night) or drive toward Montrose',
-   activites:[{t:'6:00 AM',x:"<span class='magic'>Maroon Bells shuttle at opening</span> (~$8) from Aspen Highlands. Golden morning light is irreplaceable"},{t:'7:00 AM',x:"<span class='magic'>Maroon Lake reflection</span> + Maroon Bells (14,009 ft & 14,019 ft). Crater Lake Trail (3 mi)"},{t:'10:00 AM',x:'Option: West Maroon Pass Trail (14 mi, advanced hikers)'},{t:'12:30 PM',x:'Return shuttle · lunch in Aspen'},{t:'3:00 PM',x:'Explore Aspen: galleries, boutiques'},{t:'5:30 PM',x:'Drive Aspen → Montrose (2h30 via CO-133 — Crystal Mill detour optional)'}],
-   tips:'Shuttle: mandatory reservation at recreation.gov — sells out weeks ahead in Jul–Aug. CO-133 via Redstone: outstanding scenery.',
-   budget:{min:'~$100',conf:'~$320',prem:'~$600'},bn:'Shuttle + accommodation + Aspen meals'},
-  {num:'D10',phase:'rt',tag:'Road trip',title:'Black Canyon of the Gunnison NP',subtitle:'Vertiginous canyon, Painted Wall',
-   hebergement:'Montrose — Hampton Inn (comfort) or South Rim campground',
-   activites:[{t:'8:00 AM',x:'Drive Montrose → Black Canyon NP (1h)'},{t:'9:30 AM',x:'South Rim overlooks: Gunnison Point, Cross Fissures View'},{t:'10:30 AM',x:"<span class='magic'>Painted Wall View</span> — 2,250 ft cliff with pink pegmatite veins. Best in morning light"},{t:'11:30 AM',x:'Warner Point Nature Trail (2 mi) — canyon + San Juan Mountains panorama'},{t:'1:00 PM',x:'Picnic at canyon rim'},{t:'2:30 PM',x:'Option: Curecanti NRA — Blue Mesa Reservoir kayak (~$40)'},{t:'5:00 PM',x:'Return Montrose · dinner at The Brickhouse 700'}],
-   tips:"Painted Wall: best in morning direct light. Blue Mesa: Colorado's largest reservoir, kayak rental available.",
-   budget:{min:'~$80',conf:'~$200',prem:'~$320'},bn:'Park entry + accommodation + meals'},
-  {num:'D11',phase:'rt',tag:'Road trip',title:'Great Sand Dunes National Park',subtitle:'Giant dunes, sandboarding — a one-of-a-kind experience',
-   hebergement:'Alamosa — Hampton Inn or Great Sand Dunes campground',
-   activites:[{t:'7:30 AM',x:'Drive Montrose → Great Sand Dunes NP (2h30 via US-285 S)'},{t:'10:00 AM',x:'Arrive — rent sandboard (~$20) at park entrance'},{t:'10:30 AM',x:"<span class='magic'>Climb High Dune</span> (850 ft gain, ~2.5h round trip on loose sand)"},{t:'1:00 PM',x:'Sandboard the dunes — nowhere else on Earth'},{t:'2:30 PM',x:'Medano Creek: wade in the sand-surge flow (best May–July)'},{t:'5:30 PM',x:'Drive to Alamosa (~45 min) · dinner at San Luis Valley Brewing Co.'}],
-   tips:'Arrive early: sand surface exceeds 150°F (65°C) after 1 PM. Bring 3L+ water, max sunscreen, hat.',
-   budget:{min:'~$80',conf:'~$190',prem:'~$300'},bn:'Park entry + accommodation + meals'},
-  {num:'D12',phase:'rt',tag:'Road trip',title:'Royal Gorge Via Ferrata — Return',subtitle:'Canyon via ferrata + last spectacular landscape of the road trip',
+   activites:[{t:'7:30 AM',x:"<span class='magic'>Great Sand Dunes — early morning</span>: best light on the dunes, cooler sand, fewer people"},{t:'9:30 AM',x:'Medano Creek final walk · visitor center'},{t:'10:30 AM',x:'Depart Alamosa → Arvada (3h30 via US-285 N + I-25 N)'},{t:'2:00 PM',x:'Arrive back in Arvada — reunion with M&R '},{t:'Evening',x:'Rest and dinner with M&R — debrief the road trip over food'}],
+   tips:'Leave the dunes no later than 10:30 AM to arrive Arvada in early afternoon. US-285 N through South Park is beautiful — a fitting end to the road trip.',
+   budget:{min:'~$40',conf:'~$80',prem:'~$120'},bn:'Final park visit + drive back'},
+  {num:'D13',phase:'fin',tag:'End of stay',title:'D13 — To be confirmed',subtitle:'Day with M&R in Arvada',
    hebergement:'Arvada M&R',
-   activites:[{t:'7:30 AM',x:'Drive Alamosa → Royal Gorge (2h via US-285 N)'},{t:'9:30 AM',x:'Royal Gorge Bridge: suspension bridge 1,053 ft above canyon (~$30)'},{t:'10:30 AM',x:"<span class='magic'>Canyon Bridge Via Ferrata</span> (~3h, level B/C) — harness & helmet provided"},{t:'2:00 PM',x:'Lunch in Cañon City'},{t:'3:30 PM',x:'Drive back to Arvada (2h15 via US-50 E + I-25 N)'},{t:'6:00 PM',x:'Back in Arvada — reunion with friends'}],
-   tips:'Via Ferrata: mandatory online booking (~$49–69). Check weather day before. Alt without climbing: bridge walk + zipline (~$30).',
-   budget:{min:'~$90',conf:'~$200',prem:'~$300'},bn:'Royal Gorge + lunch + transport'},
-  {num:'D13',phase:'fin',tag:'End of stay',title:'Denver day with friends',subtitle:'LoDo, Union Station, culture or game',
+   activites:[{t:'TBC',x:'To be confirmed with M&R'}],
+   tips:'',
+   budget:{min:'TBC',conf:'TBC',prem:'TBC'},bn:'TBC'},
+  {num:'D14',phase:'fin',tag:'End of stay',title:'D14 — To be confirmed',subtitle:'Day with M&R in Arvada',
    hebergement:'Arvada M&R',
-   activites:[{t:'Morning',x:'Rest after road trip'},{t:'Afternoon',x:'Denver: Union Station, Larimer Square, Denver Art Museum or History Colorado Center'},{t:'Evening',x:'Option: MLB Rockies or MLS Rapids — confirm with friends'}],
-   tips:'Denver Art Museum: Libeskind architecture, outstanding Native American collection (~$22). Larimer Square: most vibrant historic street.',
-   budget:{min:'~$50',conf:'~$110',prem:'~$200'},bn:'Activities only — accommodation covered'},
-  {num:'D14',phase:'fin',tag:'End of stay',title:'Souvenirs & farewell dinner',subtitle:'Red Rocks morning hike + Cherry Creek + fine dining',
-   hebergement:'Arvada M&R',
-   activites:[{t:'Morning',x:'Red Rocks Park: free morning hike, sweeping Denver views'},{t:'Afternoon',x:'Cherry Creek Shopping District: quality souvenirs'},{t:'Evening',x:"<span class='magic'>Farewell dinner</span> — Elway's Cherry Creek (steakhouse) or Fruition Restaurant (seasonal local)"}],
-   tips:"Elway's: reservation required. Fruition: chef-driven, adaptable to allergies — mention mustard when booking.",
-   budget:{min:'~$60',conf:'~$130',prem:'~$280'},bn:'Souvenirs + meals — accommodation covered'},
-  {num:'D15',phase:'dep',tag:'Departure',title:'Return flight ~5 PM from DEN',subtitle:'Morning in Arvada — airport transfer 1 PM',
+   activites:[{t:'TBC',x:'To be confirmed with M&R'}],
+   tips:'',
+   budget:{min:'TBC',conf:'TBC',prem:'TBC'},bn:'TBC'},
+  {num:'D15',phase:'dep',tag:'Departure',title:'Return flight to France',subtitle:'Morning with M&R — airport transfer · TBC time',
    hebergement:'—',
-   activites:[{t:'Morning',x:'Farewell brunch with friends in Arvada'},{t:'1:00 PM',x:'Depart for Denver International Airport (40–50 min)'},{t:'3:00 PM',x:'Check-in + security at DEN (allow 2h for international)'},{t:'5:00 PM',x:'Takeoff back to Europe'}],
-   tips:'DEN is large — International Terminal B/C: allow 15–20 min from parking. Uber ~$45–55. Good Colorado bourbon selection at duty free.',
-   budget:{min:'~$40',conf:'~$60',prem:'~$80'},bn:'Brunch + airport transfer'}
+   activites:[{t:'Morning',x:'Farewell brunch with M&R in Arvada'},{t:'TBC',x:'Depart for Denver International Airport (allow 2h+ for international flight)'},{t:'TBC',x:'Check-in + security at DEN'},{t:'TBC',x:'Takeoff back to France'}],
+   tips:'DEN is large — International Terminal B/C: allow 15–20 min from parking. Good Colorado bourbon selection at duty free.',
+   budget:{min:'TBC',conf:'TBC',prem:'TBC'},bn:'Brunch + airport transfer'}
 ];
 
 let openStates={};
@@ -853,13 +684,7 @@ function renderDays(list){
         <div class="slabel">Practical tips</div>
         <div class="info-block">${d.tips}</div>
         ${mapHtml}
-        <div class="slabel">Estimated budget / person</div>
-        <div class="budget-grid">
-          <div class="bc b-min"><div class="bl">Budget</div><div class="ba">${d.budget.min}</div></div>
-          <div class="bc b-conf"><div class="bl">Comfort</div><div class="ba">${d.budget.conf}</div></div>
-          <div class="bc b-prem"><div class="bl">Premium</div><div class="ba">${d.budget.prem}</div></div>
-        </div>
-        <div class="b-note">${d.bn}</div>
+
       </div>
     </div>`;
   }).join('');
