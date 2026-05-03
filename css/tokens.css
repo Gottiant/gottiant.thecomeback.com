@@ -1,0 +1,112 @@
+/* ==========================================================================
+   tokens.css
+   Single source of truth for all colors, typography, spacing, and motion.
+   No hex values should appear anywhere outside this file.
+   ========================================================================== */
+
+:root {
+  /* ── Page structure ── */
+  --color-page-bg:           #EDECEA;
+  --color-card-bg:           #FFFFFF;
+  --color-card-border:       rgba(28, 30, 27, 0.07);
+  --color-card-border-hover: rgba(28, 30, 27, 0.14);
+  --color-divider:           rgba(28, 30, 27, 0.08);
+
+  /* ── Navigation ── */
+  --color-nav-bg:            #2D4A3A;
+  --color-nav-text:          #F5F2EC;
+  --color-nav-text-muted:    rgba(245, 242, 236, 0.60);
+  --color-nav-accent:        #C9A882;
+  --color-nav-active-border: #E7B97A;
+  --color-nav-hover-bg:      rgba(245, 242, 236, 0.08);
+
+  /* ── Hero ── */
+  --color-hero-bg-from:      #2D4A3A;
+  --color-hero-bg-to:        #1C3028;
+  --color-hero-title:        #F5F2EC;
+  --color-hero-subtitle:     rgba(245, 242, 236, 0.65);
+  --color-hero-eyebrow:      #E7B97A;
+  --color-hero-badge-bg:     rgba(231, 185, 122, 0.18);
+  --color-hero-badge-border: rgba(231, 185, 122, 0.40);
+  --color-hero-badge-text:   #E7B97A;
+  --color-hero-chip-bg:      rgba(245, 242, 236, 0.10);
+  --color-hero-chip-border:  rgba(245, 242, 236, 0.22);
+  --color-hero-chip-text:    rgba(245, 242, 236, 0.85);
+
+  /* ── Phase colors ── */
+  --color-phase-arvada:      #E7B97A;
+  --color-phase-arvada-text: #7A4A08;
+  --color-phase-arvada-bg:   rgba(231, 185, 122, 0.15);
+  --color-phase-rt:          #6F8A73;
+  --color-phase-rt-text:     #2A4A2A;
+  --color-phase-rt-bg:       rgba(111, 138, 115, 0.15);
+  --color-phase-fin:         #A7C4D9;
+  --color-phase-fin-text:    #1A3A5C;
+  --color-phase-fin-bg:      rgba(167, 196, 217, 0.15);
+  --color-phase-dep:         #C4BFB8;
+  --color-phase-dep-text:    #555550;
+  --color-phase-dep-bg:      rgba(196, 191, 184, 0.15);
+
+  /* ── Accent colors ── */
+  --color-accent-danger:     #C1442E;
+  --color-accent-cta:        #3F6B4B;
+  --color-accent-cta-hover:  #2D5038;
+  --color-accent-highlight:  #F2A65A;
+  --color-accent-success:    #6F8A73;
+  --color-accent-warning:    #C1442E;
+
+  /* ── Text ── */
+  --color-text-primary:      #1C1E1B;
+  --color-text-secondary:    #484A46;
+  --color-text-muted:        #888880;
+  --color-text-on-dark:      #F5F2EC;
+  --color-text-on-dark-muted:rgba(245, 242, 236, 0.65);
+
+  /* ── SVG map ── */
+  --color-map-bg:            #E8E4DE;
+  --color-map-state-co:      #E0DCD4;
+  --color-map-state-ut:      #D8D0C8;
+  --color-map-state-stroke:  #C4BAA8;
+  --color-map-state-label:   #A8A090;
+  --color-map-mountain:      #6F8A73;
+  --color-map-route-rt:      #6F8A73;
+  --color-map-route-spur:    #E7B97A;
+  --color-map-route-local:   #A7C4D9;
+  --color-map-tooltip-bg:    #1C1E1B;
+  --color-map-tooltip-text:  #F5F2EC;
+
+  /* ── Chart ── */
+  --color-chart-avg-line:    #C1442E;
+  --color-chart-tooltip-bg:  #2D4A3A;
+  --color-chart-tooltip-text:#F5F2EC;
+
+  /* ── Checklist ── */
+  --color-check-header-bg:   #3F6B4B;
+  --color-check-header-text: #F5F2EC;
+  --color-check-progress-bg: rgba(111, 138, 115, 0.20);
+  --color-check-progress-fill:#6F8A73;
+  --color-check-done-bg:     rgba(111, 138, 115, 0.08);
+  --color-check-warn:        #C1442E;
+
+  /* ── Events ── */
+  --color-event-available:   #6F8A73;
+  --color-event-unavailable: #C4BFB8;
+
+  /* ── Footer ── */
+  --color-footer-bg:         #2D4A3A;
+  --color-footer-text:       rgba(245, 242, 236, 0.50);
+  --color-footer-accent:     #C9A882;
+
+  /* ── Typography ── */
+  --font-display:            'Montserrat', sans-serif;
+  --font-body:               'Roboto', sans-serif;
+
+  /* ── Spacing & radius ── */
+  --radius-card:             10px;
+  --radius-pill:             20px;
+  --radius-btn:              6px;
+  --shadow-card:             0 1px 3px rgba(28,30,27,0.06), 0 1px 2px rgba(28,30,27,0.04);
+  --shadow-card-hover:       0 4px 12px rgba(28,30,27,0.10);
+  --transition-fast:         0.15s ease;
+  --transition-med:          0.25s ease;
+}
