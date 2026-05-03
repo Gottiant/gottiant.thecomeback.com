@@ -1,0 +1,819 @@
+/* ==========================================================================
+   itinerary.css
+   Page-specific styles for itinerary.html only.
+   Hero, journey overview, SVG map, day cards, chart, events.
+   All colors via tokens — no hex values here.
+   ========================================================================== */
+
+/* ── Layout containers ────────────────────────────────────────────── */
+.page-wrap {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.section {
+  padding: 60px 0;
+}
+
+.section--tight { padding: 40px 0; }
+
+.section-eyebrow {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 8px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.section-sub {
+  font-size: 15px;
+  color: var(--color-text-secondary);
+  margin-bottom: 32px;
+  max-width: 60ch;
+}
+
+/* ── JOURNEY OVERVIEW ─────────────────────────────────────────────── */
+.overview-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 20px 24px 28px;
+}
+
+.overview-legend {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.overview-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+}
+
+.legend-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 2px;
+}
+
+.timeline-strip-wrap {
+  position: relative;
+  margin: 0 60px;
+  padding: 36px 0 40px;
+}
+
+.timeline-strip {
+  position: relative;
+  display: flex;
+  height: 12px;
+  gap: 2px;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.timeline-segment {
+  height: 100%;
+  border-radius: 4px;
+}
+
+.timeline-segment.phase-arvada { background: var(--color-phase-arvada); }
+.timeline-segment.phase-rt     { background: var(--color-phase-rt); }
+.timeline-segment.phase-fin    { background: var(--color-phase-fin); }
+
+.timeline-annotation {
+  position: absolute;
+  transform: translateX(-50%);
+  text-align: center;
+  width: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-annotation--above {
+  bottom: calc(100% + 6px);
+}
+
+.timeline-annotation--below {
+  top: calc(100% + 6px);
+}
+
+.timeline-annotation .conn {
+  display: block;
+  width: 1px;
+  height: 14px;
+  background: var(--color-text-muted);
+  margin: 0 auto;
+  opacity: 0.5;
+}
+
+.timeline-annotation--above .conn { margin-top: 4px; }
+.timeline-annotation--below .conn { margin-bottom: 4px; }
+
+.timeline-annotation .label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: 0.02em;
+  display: block;
+}
+
+.timeline-annotation .sub {
+  font-family: var(--font-body);
+  font-size: 10px;
+  color: var(--color-text-muted);
+  display: block;
+  margin-top: 2px;
+}
+
+@media (max-width: 600px) {
+  .timeline-strip-wrap {
+    margin: 0 30px;
+  }
+  .timeline-annotation {
+    width: 70px;
+  }
+  .timeline-annotation .label,
+  .timeline-annotation .sub {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 480px) {
+  .timeline-annotation--below { display: none; }
+  .timeline-strip-wrap { padding: 36px 0 16px; }
+}
+
+/* ── SVG MAP ──────────────────────────────────────────────────────── */
+.map-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+.map-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.map-filter-status {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-text-secondary);
+}
+
+.map-clear-btn {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-accent-cta);
+  padding: 6px 12px;
+  border: 1px solid var(--color-accent-cta);
+  border-radius: var(--radius-btn);
+  display: none;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+
+.map-clear-btn:hover {
+  background: var(--color-accent-cta);
+  color: var(--color-text-on-dark);
+}
+
+.map-clear-btn.is-visible { display: inline-block; }
+
+.map-svg-wrap {
+  position: relative;
+  display: flex;
+  justify-content: center;
+}
+
+.map-svg {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  background: var(--color-map-bg);
+  border-radius: var(--radius-card);
+}
+
+.map-svg .stop {
+  cursor: pointer;
+  transition: transform var(--transition-fast);
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.map-svg .stop:hover {
+  transform: scale(1.18);
+}
+
+.map-svg .stop.is-pulse {
+  animation: stopPulse 0.6s ease-out;
+}
+
+@keyframes stopPulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.map-svg .route {
+  cursor: pointer;
+  transition: stroke-width var(--transition-fast), opacity var(--transition-fast);
+  fill: none;
+}
+
+.map-svg .route:hover {
+  stroke-width: 4;
+}
+
+.map-svg .route.is-active {
+  opacity: 1;
+  stroke-width: 4;
+}
+
+.map-svg .stop-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--color-text-primary);
+  pointer-events: none;
+}
+
+.map-svg .state-label {
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  fill: var(--color-map-state-label);
+  pointer-events: none;
+}
+
+.map-tooltip {
+  position: absolute;
+  background: var(--color-map-tooltip-bg);
+  color: var(--color-map-tooltip-text);
+  padding: 8px 12px;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  white-space: nowrap;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.map-tooltip.is-visible { opacity: 1; }
+
+.map-tooltip-title {
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.map-tooltip-meta {
+  font-size: 11px;
+  opacity: 0.8;
+}
+
+.map-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+.btn-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-on-dark);
+  background: var(--color-accent-cta);
+  padding: 12px 18px;
+  border-radius: var(--radius-btn);
+  transition: background var(--transition-fast);
+  flex: 1;
+  min-width: 220px;
+  justify-content: center;
+}
+
+.btn-cta:hover { background: var(--color-accent-cta-hover); }
+
+/* ── DAY FILTER TABS ──────────────────────────────────────────────── */
+.day-filter-tabs {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.day-tab {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  padding: 8px 14px;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.day-tab:hover {
+  border-color: var(--color-card-border-hover);
+}
+
+.day-tab .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.day-tab[data-phase="arvada"] .dot { background: var(--color-phase-arvada); }
+.day-tab[data-phase="rt"] .dot     { background: var(--color-phase-rt); }
+.day-tab[data-phase="fin"] .dot    { background: var(--color-phase-fin); }
+
+.day-tab.is-active[data-phase="all"]    { background: var(--color-text-primary); color: var(--color-text-on-dark); border-color: var(--color-text-primary); }
+.day-tab.is-active[data-phase="arvada"] { background: var(--color-phase-arvada); color: var(--color-phase-arvada-text); border-color: var(--color-phase-arvada); }
+.day-tab.is-active[data-phase="rt"]     { background: var(--color-phase-rt); color: var(--color-text-on-dark); border-color: var(--color-phase-rt); }
+.day-tab.is-active[data-phase="fin"]    { background: var(--color-phase-fin); color: var(--color-phase-fin-text); border-color: var(--color-phase-fin); }
+
+/* ── DAY CARDS ────────────────────────────────────────────────────── */
+.day-cards { display: flex; flex-direction: column; gap: 16px; }
+
+.day-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 40% 60%;
+  border-left: 2px solid transparent;
+  transition: opacity var(--transition-med), max-height var(--transition-med),
+              border-color var(--transition-fast), box-shadow var(--transition-fast),
+              margin var(--transition-med), padding var(--transition-med);
+  max-height: 1200px;
+}
+
+.day-card:hover {
+  border-color: var(--color-card-border-hover);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.day-card.is-open {
+  border-left-color: var(--color-accent-danger);
+}
+
+.day-card.is-filtered-out {
+  opacity: 0.3;
+  max-height: 80px;
+  pointer-events: none;
+}
+
+.day-photo {
+  position: relative;
+  min-height: 220px;
+  background-size: cover;
+  background-position: center;
+  cursor: pointer;
+}
+
+.day-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(28, 48, 40, 0.35) 0%, rgba(28, 48, 40, 0.78) 100%);
+}
+
+.day-photo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: var(--color-text-on-dark);
+}
+
+.day-num {
+  font-family: var(--font-display);
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  color: var(--color-text-on-dark);
+  text-shadow: 0 2px 12px rgba(0,0,0,0.3);
+}
+
+.day-num small {
+  display: block;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+
+.day-title-block .day-phase-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  margin-bottom: 8px;
+}
+
+.day-card[data-phase="arvada"] .day-phase-tag { background: var(--color-phase-arvada); color: var(--color-phase-arvada-text); }
+.day-card[data-phase="rt"] .day-phase-tag     { background: var(--color-phase-rt); color: var(--color-text-on-dark); }
+.day-card[data-phase="fin"] .day-phase-tag    { background: var(--color-phase-fin); color: var(--color-phase-fin-text); }
+
+.day-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--color-text-on-dark);
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+  letter-spacing: -0.005em;
+}
+
+.day-subtitle-mini {
+  font-size: 12px;
+  color: var(--color-text-on-dark-muted);
+  margin-top: 4px;
+}
+
+.day-content {
+  padding: 24px 26px;
+  background: var(--color-card-bg);
+}
+
+.day-accommodation {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.day-accommodation .acc-label {
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.day-timeline {
+  margin-bottom: 16px;
+}
+
+.day-timeline li {
+  display: grid;
+  grid-template-columns: 80px 1fr;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.day-timeline .time {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  letter-spacing: 0.02em;
+  padding-top: 2px;
+}
+
+.day-timeline .highlight {
+  color: var(--color-accent-highlight);
+  font-weight: 500;
+  font-family: var(--font-display);
+  margin-right: 2px;
+}
+
+.day-tips {
+  background: var(--color-page-bg);
+  border-radius: var(--radius-btn);
+  padding: 12px 14px;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  border-left: 3px solid var(--color-accent-highlight);
+  line-height: 1.5;
+}
+
+.day-tips strong {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-text-primary);
+  display: block;
+  margin-bottom: 4px;
+}
+
+.day-maps-link {
+  display: inline-block;
+  margin-top: 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  color: var(--color-accent-cta);
+  border-bottom: 1px solid var(--color-accent-cta);
+  padding-bottom: 1px;
+}
+
+.day-maps-link:hover { color: var(--color-accent-cta-hover); }
+
+.day-note {
+  background: var(--color-phase-rt-bg);
+  border-radius: var(--radius-btn);
+  padding: 10px 12px;
+  font-size: 12px;
+  color: var(--color-phase-rt-text);
+  margin-bottom: 14px;
+  font-style: italic;
+}
+
+@media (max-width: 720px) {
+  .day-card {
+    grid-template-columns: 1fr;
+  }
+  .day-photo { min-height: 200px; max-height: 200px; }
+  .day-num { font-size: 42px; }
+  .day-content { padding: 20px; }
+  .day-timeline li {
+    grid-template-columns: 70px 1fr;
+    gap: 10px;
+    font-size: 13.5px;
+  }
+}
+
+/* ── DRIVING DISTANCE CHART ───────────────────────────────────────── */
+.chart-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  padding: 24px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.unit-toggle {
+  display: inline-flex;
+  background: var(--color-page-bg);
+  border-radius: var(--radius-pill);
+  padding: 3px;
+}
+
+.unit-toggle button {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  transition: all var(--transition-fast);
+}
+
+.unit-toggle button.is-active {
+  background: var(--color-accent-cta);
+  color: var(--color-text-on-dark);
+}
+
+.chart-svg-wrap {
+  position: relative;
+}
+
+.chart-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.chart-svg .bar {
+  cursor: pointer;
+  transition: opacity var(--transition-fast);
+}
+
+.chart-svg .bar:hover { opacity: 0.85; }
+
+.chart-svg .bar-rect {
+  transform-origin: bottom;
+}
+
+.chart-svg .axis-label {
+  font-family: var(--font-display);
+  font-size: 9px;
+  fill: var(--color-text-muted);
+  letter-spacing: 0.04em;
+}
+
+.chart-svg .y-grid {
+  stroke: var(--color-divider);
+  stroke-width: 1;
+}
+
+.chart-svg .avg-line {
+  stroke: var(--color-chart-avg-line);
+  stroke-width: 1.5;
+  stroke-dasharray: 5, 4;
+  fill: none;
+}
+
+.chart-svg .avg-label {
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--color-chart-avg-line);
+  letter-spacing: 0.04em;
+}
+
+.chart-tooltip {
+  position: absolute;
+  background: var(--color-chart-tooltip-bg);
+  color: var(--color-chart-tooltip-text);
+  padding: 8px 12px;
+  border-radius: var(--radius-btn);
+  font-family: var(--font-body);
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  white-space: nowrap;
+  max-width: 240px;
+  white-space: normal;
+  z-index: 10;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.chart-tooltip.is-visible { opacity: 1; }
+
+.chart-tooltip strong {
+  font-family: var(--font-display);
+  display: block;
+  margin-bottom: 2px;
+}
+
+/* ── EVENTS ───────────────────────────────────────────────────────── */
+.events-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.event-card {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  border-left: 4px solid var(--color-event-available);
+  padding: 20px 24px;
+  box-shadow: var(--shadow-card);
+}
+
+.event-card.is-unavailable {
+  border-left-color: var(--color-event-unavailable);
+  opacity: 0.55;
+}
+
+.event-card.is-unavailable .event-title {
+  text-decoration: line-through;
+}
+
+.event-tag {
+  display: inline-block;
+  font-family: var(--font-display);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-event-available);
+  margin-bottom: 6px;
+}
+
+.event-card.is-unavailable .event-tag {
+  color: var(--color-event-unavailable);
+}
+
+.event-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  margin-bottom: 6px;
+}
+
+.event-body {
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.55;
+}
+
+.event-warn {
+  display: block;
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--color-accent-warning);
+  font-weight: 500;
+}
+
+.events-subtitle {
+  font-family: var(--font-display);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  margin: 32px 0 12px;
+}
+
+.festivals {
+  background: var(--color-card-bg);
+  border: 1px solid var(--color-card-border);
+  border-radius: var(--radius-card);
+  padding: 18px 22px;
+  box-shadow: var(--shadow-card);
+}
+
+.festivals li {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: 14px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+}
+
+.festivals li:last-child { border-bottom: none; }
+
+.festivals li strong {
+  color: var(--color-text-primary);
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 13px;
+}
