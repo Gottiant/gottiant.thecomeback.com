@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Our Colorado Adventure — Home</title>
+  <title>Our Colorado Adventure — Preparation</title>
   <link rel="stylesheet" href="css/tokens.css">
   <link rel="stylesheet" href="css/global.css">
 </head>
@@ -12,8 +12,8 @@
     <div class="nav-inner">
       <a href="index.html" class="nav-brand">Our Colorado</a>
       <nav class="nav-links">
-        <a href="index.html" class="nav-link nav-link--active">Home</a>
-        <a href="preparation.html" class="nav-link">Preparation</a>
+        <a href="index.html" class="nav-link">Home</a>
+        <a href="preparation.html" class="nav-link nav-link--active">Preparation</a>
         <a href="itinerary.html" class="nav-link">Itinerary</a>
         <a href="useful-info.html" class="nav-link">Useful info</a>
       </nav>
@@ -24,8 +24,8 @@
   </header>
 
   <main style="padding: 160px 24px 120px; text-align: center;">
-    <h1 style="font-family: var(--font-display); font-size: 32px; color: var(--color-text-primary); margin-bottom: 12px;">Home — coming soon</h1>
-    <p style="color: var(--color-text-secondary); font-size: 16px;">Visit the <a href="itinerary.html" style="color: var(--color-accent-cta); border-bottom: 1px solid var(--color-accent-cta);">Itinerary</a> to see the full plan.</p>
+    <h1 style="font-family: var(--font-display); font-size: 32px; color: var(--color-text-primary); margin-bottom: 12px;">Preparation — coming soon</h1>
+    <p style="color: var(--color-text-secondary); font-size: 16px;">Packing checklist and pre-departure essentials will land here.</p>
   </main>
 
   <footer class="site-footer">
@@ -36,7 +36,6 @@
 
   <script src="js/nav.js"></script>
   <script>
-    // Auto-fill date stamp on stub pages
     const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
     document.querySelectorAll('[data-auto-date]').forEach(n => n.textContent = today);
   </script>
