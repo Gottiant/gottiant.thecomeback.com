@@ -50,15 +50,17 @@
   border: 1px solid var(--color-card-border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-card);
-  padding: 20px 24px 28px;
+  padding: 24px 24px 24px;
 }
 
 .overview-legend {
   display: flex;
-  gap: 20px;
+  gap: 24px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 36px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--color-divider);
 }
 
 .overview-legend-item {
@@ -82,7 +84,8 @@
 .timeline-strip-wrap {
   position: relative;
   margin: 0 60px;
-  padding: 36px 0 40px;
+  /* Reserve vertical space for above and below annotations (~50px each side + breathing) */
+  padding: 60px 0 60px;
 }
 
 .timeline-strip {
@@ -103,31 +106,50 @@
 .timeline-segment.phase-rt     { background: var(--color-phase-rt); }
 .timeline-segment.phase-fin    { background: var(--color-phase-fin); }
 
+/* ── Annotations ─────────────────────────────────────────────────────
+   Annotations are absolutely positioned relative to .timeline-strip-wrap.
+   We use top/bottom values that anchor them within the wrap's padding zone,
+   so they never extend outside the card.
+*/
 .timeline-annotation {
   position: absolute;
   transform: translateX(-50%);
   text-align: center;
-  width: 100px;
+  width: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  pointer-events: none;
 }
 
+/* Above: occupies the top padding zone of the wrap.
+   Annotation top = 0; bottom of conn touches the strip top (which is at padding-top). */
 .timeline-annotation--above {
-  bottom: calc(100% + 6px);
+  top: 0;
+  bottom: auto;
+  height: 60px; /* matches padding-top */
+  flex-direction: column; /* label, sub, conn — conn at bottom (touches strip) */
+  justify-content: flex-start;
 }
 
+/* Below: occupies the bottom padding zone of the wrap.
+   Annotation bottom = 0; top of conn touches the strip bottom. */
 .timeline-annotation--below {
-  top: calc(100% + 6px);
+  bottom: 0;
+  top: auto;
+  height: 60px;
+  flex-direction: column-reverse; /* visual: conn at top (touches strip), then label, then sub */
+  justify-content: flex-start;
 }
 
 .timeline-annotation .conn {
   display: block;
   width: 1px;
-  height: 14px;
   background: var(--color-text-muted);
-  margin: 0 auto;
-  opacity: 0.5;
+  opacity: 0.55;
+  flex: 1; /* fills the remaining vertical space, reaching the strip */
+  min-height: 14px;
+  margin: 0;
 }
 
 .timeline-annotation--above .conn { margin-top: 4px; }
@@ -135,10 +157,11 @@
 
 .timeline-annotation .label {
   font-family: var(--font-display);
-  font-size: 10px;
+  font-size: 10.5px;
   font-weight: 600;
   color: var(--color-text-primary);
   letter-spacing: 0.02em;
+  line-height: 1.2;
   display: block;
 }
 
@@ -146,26 +169,25 @@
   font-family: var(--font-body);
   font-size: 10px;
   color: var(--color-text-muted);
+  line-height: 1.2;
   display: block;
   margin-top: 2px;
 }
 
 @media (max-width: 600px) {
   .timeline-strip-wrap {
-    margin: 0 30px;
+    margin: 0 24px;
   }
   .timeline-annotation {
-    width: 70px;
+    width: 78px;
   }
-  .timeline-annotation .label,
-  .timeline-annotation .sub {
-    font-size: 9px;
-  }
+  .timeline-annotation .label { font-size: 9.5px; }
+  .timeline-annotation .sub   { font-size: 9px; }
 }
 
 @media (max-width: 480px) {
   .timeline-annotation--below { display: none; }
-  .timeline-strip-wrap { padding: 36px 0 16px; }
+  .timeline-strip-wrap { padding: 60px 0 16px; }
 }
 
 /* ── SVG MAP ──────────────────────────────────────────────────────── */
