@@ -123,22 +123,24 @@
 }
 
 /* Above: occupies the top padding zone of the wrap.
-   Annotation top = 0; bottom of conn touches the strip top (which is at padding-top). */
+   Annotation top = 0; bottom of conn touches the strip top (which is at padding-top).
+   Visual order: label → sub → conn (conn touches the strip below). */
 .timeline-annotation--above {
   top: 0;
   bottom: auto;
   height: 60px; /* matches padding-top */
-  flex-direction: column; /* label, sub, conn — conn at bottom (touches strip) */
+  flex-direction: column; /* DOM: label, sub, conn → visual same */
   justify-content: flex-start;
 }
 
 /* Below: occupies the bottom padding zone of the wrap.
-   Annotation bottom = 0; top of conn touches the strip bottom. */
+   Annotation bottom = 0; top of conn touches the strip bottom.
+   Visual order: conn → label → sub (text sits BELOW the connector). */
 .timeline-annotation--below {
   bottom: 0;
   top: auto;
   height: 60px;
-  flex-direction: column-reverse; /* visual: conn at top (touches strip), then label, then sub */
+  flex-direction: column; /* DOM: conn, label, sub → visual same */
   justify-content: flex-start;
 }
 
@@ -176,18 +178,19 @@
 
 @media (max-width: 600px) {
   .timeline-strip-wrap {
-    margin: 0 24px;
+    margin: 0 16px;
+    padding: 56px 0 56px;
   }
   .timeline-annotation {
-    width: 78px;
+    width: 88px;
+    height: 56px;
   }
-  .timeline-annotation .label { font-size: 9.5px; }
+  .timeline-annotation .label { font-size: 10px; }
   .timeline-annotation .sub   { font-size: 9px; }
-}
-
-@media (max-width: 480px) {
-  .timeline-annotation--below { display: none; }
-  .timeline-strip-wrap { padding: 60px 0 16px; }
+  /* Edge clamps: prevent leftmost/rightmost pins from escaping the card.
+     Override the centered transform so the pin hugs its own edge instead.   */
+  .timeline-annotation[style*="left: 3.33%"]   { transform: translateX(-20%); }
+  .timeline-annotation[style*="left: 96.67%"]  { transform: translateX(-80%); }
 }
 
 /* ── SVG MAP ──────────────────────────────────────────────────────── */
